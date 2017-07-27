@@ -4,42 +4,28 @@ var router = express.Router();
 var User = require('../models/user.js')
 
 router.post('/user/login', function(req, res){
+	console.log(req.body);
+
 	var username = req.body.username;
 	var password = req.body.password;
-	const msg = '';
-	
-	User.remove({
-		username: '123'
-	}, function(err, userInfo){
-		if(err){
-			console.log(err);
+	var result = {};
+	console.log(username)
+	User.findOne({
+		username: username
+	}).then(function(userInfo){
+		if(userInfo){
+			result = {
+				err: '0'
+			}
+		}else{
+			result = {
+				err: '-1',
+				msg: '用户名或密码错误'
+			}
 		}
 
-		res.json(userInfo);
+		res.json(result);
 	});
-
-	User.find({
-		username: '123'
-	}).exec(function(userInfo){
-		if(err){
-			console.log(err);
-		}
-
-		res.json(userInfo);
-	});
-	// promise.then(function(userInfo){
-	// 	console.log('arguments');
-	// }, function(err){
-	// 	console.log(err);
-	// });
-	
-	// .then(function(userInfo){
-	// 	if(userInfo){
-	// 		console.log('不存在这个用户')
-	// 	}else{
-	// 		console.log('存在这个用户')
-	// 	}
-	// })
 });
 
 module.exports = router;

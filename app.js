@@ -1,53 +1,73 @@
+process.env.NODE_ENV = 'development';
+
 var express = require('express');
-var mongoose = require('mongoose')
-var bodyParser = require('body-parser');
+var webpack = require('webpack');
+var mongoose = require('mongoose');
 var path = require('path');
+
+var bodyParser = require('body-parser');
+// var cookieParser = require('cookie-parser');
+// var session = require('express-session');
+
+mongoose.Promise = global.Promise;
+
 var app = express();
+var CONFIG = require('./config.js');
+var PORT = CONFIG.port;
+var destPath = CONFIG.destPath;
+var routerPath = CONFIG.routerPath;
 
-/* 加了这句 查询的then方法不会提示报错，但是传参函数也不会执行*/
-// mongoose.Promise = global.Promise;
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true}));
 
-var userSchema = new mongoose.Schema({
-	username: String,
-	password: String
+app.use(require(routerPath));
+mongoose.connect('mongodb://' + CONFIG.dbUri, {
+    useMongoClient: true
 });
-
-var User = mongoose.model('User', userSchema);
-
-app.use('/pages',express.static( path.resolve(__dirname, './src/pages/')));
-app.use(express.static( path.resolve(__dirname, './src/')));
-
-mongoose.createConnection('mongodb://localhost:27017', function(err){
-	if(err){
-		console.log(err);
-	}else{
-		console.log('db connect success');
-
-		var user = new User({
-			username: '123',
-			password: '456'
-		});
-
-		/* 提示mpromise 弃用*/
-		// user.save(function(err, userInfo){
-		// 	console.log('00000')
-		// });
-		
-		/* 提示mpromise 弃用*/
-		user.save().then(function(err, userInfo){
-			console.log('00000')
-		});
-		app.listen('8081', function(){
-			console.log('server listen on', 8081);
-		});
-
-
-	}
+var db = mongoose.connection;
+db.once('open', function(){
+    app.listen(PORT, function () {
+      console.log('Server listening at port', PORT);
+    });
 });
+db.on('error', function(){
+    console.log('connection error');
+});
+if( CONFIG.debug){
 
+    var webpackDevMiddleware = require('webpack-dev-middleware');
+    var webpackHotMiddleware = require('webpack-hot-middleware');
+    var configPath = path.join(__dirname, './webpack.conf.js')
+    // console.log(configPath)
 
+    var config = require(configPath);
+    // console.log(configPath)
 
+    var compiler = webpack(config);
+    /*为什么这里的路径要配成 ./public 呢*/
+    app.use(express.static(path.resolve(__dirname, CONFIG.srcPath)));
+    app.use(webpackDevMiddleware(compiler, {
+        publicPath: config.output.publicPath,
+        // hot: true,
+        noInfo: false,
+        inline: true,
+        stats: {
+            cached: false,
+            colors: true,
+            modules: false,
+            children: false,
+            chunks: false,
+            chunkModules: false
+        }
+    }));
+    
+    app.use(webpackHotMiddleware(compiler, {
+        log: console.log
+    }));
 
+}else{
+    // 调试生产地址，请求本地编译后的代码
+    app.use(express.static( path.resolve(__dirname, CONFIG.destPath)));
+}
+    

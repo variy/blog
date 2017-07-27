@@ -1,0 +1,15 @@
+{
+	"restartable": "rs",
+	"verbose": false,
+	"watch": [
+		"app.js",
+		"models/",
+		"routers/",
+		"schmas/"
+	],
+	"ignore": [
+		"node_modules/",
+		"src/"
+	],
+	"ext": "js ejs"
+}
