@@ -1,27 +1,19 @@
-var index = require('./a.vue');
-$(function(){
-	Vue.component('index', index);
-    new Vue({
-        el: '#container',
-        template: '<index></index>',
-        components: {
-            index: index
-        }
-    })
-})
-// alert(tpl({name: 'world'}))
-// debugger;
-// Zepto('<div></div>').html(tpl({name: 'world'})).appendTo('body')
-// $.ajax({
-// 	url: '/user/login',
-// 	type: 'post',
-// 	data: {
-// 		username: 'adog',
-// 		password: '1234'
-// 	},
-// 	success: function(data) {
-// 		console.log(data)
-// 	}
-// });
+import App from './a.vue';
+import ArticleList from './article-list.vue';
 
-// Vue
+$(function(){
+	new Vue({
+	  render: h => h(App)
+	  // template: '<settings></settings>',
+   //    components: {
+   //        settings: App
+   //    }
+	}).$mount('#app');
+
+	new Vue({
+		template: '<articles></articles>',
+		components: {
+		  articles: ArticleList
+		}
+	}).$mount('#article-box');
+});

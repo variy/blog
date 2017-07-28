@@ -8,6 +8,15 @@ var path = require('path');
 var bodyParser = require('body-parser');
 // var cookieParser = require('cookie-parser');
 // var session = require('express-session');
+var Article = require('./models/article');
+
+new Article({
+    title: 'php是最好的语言',
+    tagList: ['没有之一'],
+    introduce:'<?php ?>',
+    content: '',
+    reviewCount: 17
+}).save();
 
 mongoose.Promise = global.Promise;
 

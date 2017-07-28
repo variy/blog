@@ -2,6 +2,15 @@
 	margin-bottom: 12px;
 }
 
+.mrb-22, .article {
+	margin-bottom: 22px;
+}
+.article {
+	max-width: 640px;
+}
+.article > p {
+	text-indent: 2em;
+}
 .txt-c {
 	text-align: center;
 }

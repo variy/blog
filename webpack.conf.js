@@ -138,7 +138,7 @@ var webpackConfig = {
                 ]
             },
             {
-                test: /\.ejs?$/,
+                test: /\.ejs$/,
                 loader: 'ejs-loader',
                 exclude:  pageDefaultSetting.template
             },
@@ -160,13 +160,6 @@ var webpackConfig = {
                 test: /\.jsx$/,
                 exclude: /^node_modules$/,
                 use: ['jsx', 'babel?presets[]=es2015,presets[]=react']
-            },
-            {
-                test: /\.ejs$/,
-                loader: 'ejs-loader',
-                // query: {
-                //     variable: 'data',
-                // }
             }
         ]
     },
