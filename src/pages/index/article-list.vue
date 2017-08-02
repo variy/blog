@@ -3,7 +3,6 @@
 		</articleitem>
 </tempalte>
 <script>
-	import article from './article.vue';
 	var result = [{
 		title: '标题1',
 		tagList: ['tag'],
@@ -20,15 +19,24 @@
 		introduce: '222',
 		reviewCount: 6
 	}];
-	export default {
-		// components: {
-		// 	articleitem: article
+
+	var  article =  require('./article.vue');
+	module.exports = {
+		data: function(){
+			return {
+				articleList: result
+			}
+		},
+		components: {
+			articleitem: article
+		},
+		// render: function(createElement){
+		// 	return createElement(article, [
+		// 		this.$scopedSlots.default({
+		// 			title: 
+		// 		})
+		// 	])
 		// },
-		render: function(createElement){
-			return createElement(article, result.map(function(item){
-				return createElement(article, item)
-			}))
-		}
 		// h => h(article),
 		
 	}

@@ -1,5 +1,5 @@
 import App from './a.vue';
-import ArticleList from './article-list.vue';
+var  ArticleList = require('./article-list.vue');
 
 $(function() {
 	new Vue({
@@ -11,12 +11,12 @@ $(function() {
 	}).$mount('#app1');
 
 	var AA = new Vue({
-		render: h => h(ArticleList),
+		// render: h => h(ArticleList),
 
-		// template: '<articles></articles>',
-		// components: {
-		//   articles: ArticleList
-		// }
+		template: '<div><articles></articles></div>',
+		components: {
+		  articles: ArticleList
+		}
 	}).$mount('#article-box');
 	console.log(ArticleList.articleList)
 	// Vue.set(ArticleList.articleList, 0, {

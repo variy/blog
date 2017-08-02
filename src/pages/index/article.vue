@@ -15,7 +15,7 @@
 </template>
 
 <script>
-	export default {
+	module.expots =  {
 		props: {
 			title: {
 				type: String,
@@ -27,9 +27,9 @@
 		},
 		// data: function(){
 		// 	return {
-		// 		title: '111',
-		// 		tagList: [111],
-		// 		introduce: '222',
+		// 		title: '',
+		// 		tagList: [],
+		// 		introduce: '',
 		// 		reviewCount: -1
 		// 	}
 		// }
