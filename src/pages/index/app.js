@@ -4,26 +4,28 @@ var  ArticleList = require('./article-list.vue');
 $(function() {
 	new Vue({
 		render: h => h(App)
-			// template: '<settings></settings>',
-			//    components: {
-			//        settings: App
-			//    }
 	}).$mount('#app1');
 
-	var AA = new Vue({
-		// render: h => h(ArticleList),
-
-		template: '<div><articles></articles></div>',
-		components: {
-		  articles: ArticleList
+	$.ajax({
+		url: '/article/query',
+		data: {
+			ps: '2',
+			pn: Global.searchObj.page || '1'
 		}
-	}).$mount('#article-box');
-	console.log(ArticleList.articleList)
-	// Vue.set(ArticleList.articleList, 0, {
-	// 	title: '111',
-	// 	tagList: ['111'],
-	// 	introduce: '222',
-	// 	reviewCount: 6
-	// })
+	}).done(function(data){
+		if(data.err === '0'){
+			var result = data.data;
+			new Vue({
+				template: '<article-list :articles = "articles" :pageCount="pageCount"></article-list>',
+				data: {
+					articles: result.list,
+					pageCount: result.count
+				},
+				components: {
+				  'article-list': ArticleList
+				}
+			}).$mount('#article-box');
+		}
+	})
 
 });

@@ -1,43 +1,48 @@
-<tempalte>
-		<articleitem v-for="item in articleList" :title="item.title" :tagList="item.tagList" :introduce="item.introduce" :reviewCount="item.reviewCount"> {{ item.title}}
-		</articleitem>
-</tempalte>
+<template>
+		<div>
+			<articleitem v-for="item in articles" :title="item.title" :tagList="item.tagList" :introduce="item.introduce" :reviewCount="item.reviewCount">
+			</articleitem>
+			<nav>
+			  	<ul class="pagination">
+				    <li @click="togglePage(curPage-1)">
+				      <a href="javascript:;">
+				        <span>&laquo;</span>
+				      </a>
+				    </li>
+
+				    <li v-for="n in pageCount" @click="togglePage(n)" :class="{ active: curPage==n}"><a href="javascript:;">{{ n}}</a></li>
+				    <li @click="togglePage(curPage+1)">
+				      <a href="javascript:;">
+				        <span>&raquo;</span>
+				      </a>
+				    </li>
+			  	</ul>
+			</nav>
+		</div>
+
+</template>
 <script>
-	var result = [{
-		title: '标题1',
-		tagList: ['tag'],
-		introduce: '啊啊啊啊啊',
-		reviewCount: 6
-	}, {
-		title: '111',
-		tagList: ['111'],
-		introduce: '222',
-		reviewCount: 6
-	}, {
-		title: 'hasjkdhui',
-		tagList: ['111'],
-		introduce: '222',
-		reviewCount: 6
-	}];
 
 	var  article =  require('./article.vue');
 	module.exports = {
+		props: {
+			articles: Array,
+			pageCount: Number,
+		},
 		data: function(){
 			return {
-				articleList: result
+				curPage: Number(Global.searchObj.page || 1)
 			}
 		},
 		components: {
 			articleitem: article
 		},
-		// render: function(createElement){
-		// 	return createElement(article, [
-		// 		this.$scopedSlots.default({
-		// 			title: 
-		// 		})
-		// 	])
-		// },
-		// h => h(article),
-		
+		methods: {
+			togglePage: function(n){
+				n < 1 && (n = 1);
+				n > this.pageCount && (n = this.pageCount);
+				location.search= '?page=' + n;
+			}
+		}
 	}
 </script>

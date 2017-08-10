@@ -63,13 +63,37 @@ router.post('/user/register', function(req, res) {
 	});
 });
 
+var pageNum = 0;
+var pageSize = 2;
+var articleCount = '';
+
+router.use(function(req, res, next){
+	Article.count({}, function(err, c){
+		articleCount = c;
+		next();
+	});
+});
 router.get('/article/query', function(req, res){
-	Article.find().then(function(result){
+	var pageSize = req.query.ps;
+	var pageNum = Number(req.query.pn || '1');
+
+	var pageCount = Math.ceil(articleCount/pageSize);
+
+	pageNum < 1 && (pageNum = 1);
+	pageNum > pageCount && (pageNum = pageCount);
+
+	pageSize > articleCount && (pageSize = articleCount);
+
+	Article.find().limit(2).skip( 2 ).then(function(result){
 		var data = {};
 		if(result){
 			data = {
 				err: '0',
-				data: result
+				data: {
+					list: result,
+					count: articleCount,
+					pn: pageNum
+				}
 			}
 		}else{
 			data = {
