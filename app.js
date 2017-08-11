@@ -7,7 +7,7 @@ var path = require('path');
 
 var bodyParser = require('body-parser');
 // var cookieParser = require('cookie-parser');
-// var session = require('express-session');
+var session = require('express-session');
 var Article = require('./models/article');
 
 mongoose.Promise = global.Promise;
@@ -21,6 +21,11 @@ var routerPath = CONFIG.routerPath;
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(session({
+    secret: 'hjhjhh',
+    resave: false,
+    saveUninitialized: true
+}));
 
 app.use(require(routerPath));
 mongoose.connect('mongodb://' + CONFIG.dbUri, {

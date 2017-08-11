@@ -4,6 +4,22 @@ var router = express.Router();
 var User = require('../models/user.js')
 var Article = require('../models/article.js')
 
+router.use(function(req, res, next){
+    if(req.session.username){
+        User.findOne({
+        	username: req.session.username
+        }).then(function(userInfo){
+        	if()
+        })
+    }
+});
+
+router.get('/user/checklogin', function(req, res){
+	res.json({
+		err: '0',
+		data: req.session.isLogin
+	})
+});
 
 router.post('/user/login', function(req, res) {
 	console.log(req.body);
@@ -16,6 +32,7 @@ router.post('/user/login', function(req, res) {
 		username: username
 	}).then(function(userInfo) {
 		if (userInfo) {
+			req.session.username = username;
 			result = {
 				err: '0'
 			}
@@ -73,10 +90,10 @@ router.use(function(req, res, next){
 		next();
 	});
 });
-router.get('/article/query', function(req, res){
-	var pageSize = req.query.ps;
-	var pageNum = Number(req.query.pn || '1');
-
+router.get('/article/listquery', function(req, res){
+	var pageSize = Number(req.query.ps || '2');
+	var pageNum =  Number(req.query.pn || '1');
+	console.log('ps=>' + pageSize +', pn=>' + pageNum);
 	var pageCount = Math.ceil(articleCount/pageSize);
 
 	pageNum < 1 && (pageNum = 1);
@@ -84,7 +101,7 @@ router.get('/article/query', function(req, res){
 
 	pageSize > articleCount && (pageSize = articleCount);
 
-	Article.find().limit(2).skip( 2 ).then(function(result){
+	Article.find().limit(pageSize).skip( (pageNum-1)*pageSize ).then(function(result){
 		var data = {};
 		if(result){
 			data = {
@@ -92,7 +109,8 @@ router.get('/article/query', function(req, res){
 				data: {
 					list: result,
 					count: articleCount,
-					pn: pageNum
+					pn: pageNum,
+					pc: pageCount
 				}
 			}
 		}else{
@@ -105,6 +123,26 @@ router.get('/article/query', function(req, res){
 		res.json(data);
 	});
 
+});
+
+router.get('/article/query', function(req, res){
+	var id = req.query.id;
+
+	Article.findOne({
+		_id: id
+	}).then(function(result){
+		if(result){
+			res.json({
+				err: '0',
+				data: result
+			})
+		}else{
+			res.json({
+				err: '-1',
+				msg: '未找到该文章'
+			})
+		}
+	})
 });
 
 module.exports = router;

@@ -7,7 +7,13 @@ $(function() {
 	}).$mount('#app1');
 
 	$.ajax({
-		url: '/article/query',
+		url: '/user/checklogin',
+	}).done(function(){
+		debugger;
+	});;
+
+	$.ajax({
+		url: '/article/listquery',
 		data: {
 			ps: '2',
 			pn: Global.searchObj.page || '1'
@@ -19,7 +25,7 @@ $(function() {
 				template: '<article-list :articles = "articles" :pageCount="pageCount"></article-list>',
 				data: {
 					articles: result.list,
-					pageCount: result.count
+					pageCount: result.pc
 				},
 				components: {
 				  'article-list': ArticleList

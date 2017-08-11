@@ -1,6 +1,6 @@
 <template>
 		<div>
-			<articleitem v-for="item in articles" :title="item.title" :tagList="item.tagList" :introduce="item.introduce" :reviewCount="item.reviewCount">
+			<articleitem v-for="item in articles" :title="item.title" :tagList="item.tagList" :introduce="item.introduce" :reviewCount="item.reviewCount" :_id="item._id">
 			</articleitem>
 			<nav>
 			  	<ul class="pagination">

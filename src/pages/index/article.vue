@@ -1,5 +1,5 @@
 <template>
-	<div class="article clearfix">
+	<div class="article clearfix" @click="goItem">
 		<h3>{{ title}} 
 			<span class="label label-default" v-for="tag in tagList">{{ tag}}</span>
 		</h3>
@@ -17,9 +17,15 @@
 				type: String,
 				// required: true
 			},
+			_id: String,
 			tagList: Array,
 			introduce: String,
 			reviewCount: Number
+		},
+		methods: {
+			goItem: function(){
+				location.href = "./article.html?id=" + this._id;
+			}
 		}
 	}
 </script>
