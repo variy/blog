@@ -25,6 +25,7 @@ for(var attr in defaultOpts){
 module.exports = {
     debug: process.env.NODE_ENV === 'development',
     port: port,
+    devPort: '8082',
     dbUri: 'localhost:27017/blog',
     srcPath:  path.join(__dirname, './src'),
     destPath: path.join(__dirname, './dist/'),

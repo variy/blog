@@ -2,18 +2,21 @@ import App from './a.vue';
 var  ArticleList = require('./article-list.vue');
 
 $(function() {
-	new Vue({
-		render: h => h(App)
-	}).$mount('#app1');
 
 	$.ajax({
-		url: '/user/checklogin',
-	}).done(function(){
-		debugger;
+		url: Global.reqDomain + '/user/checklogin',
+	}).done(function(data){
+		if(data.data.isLogin){
+
+		}else{
+			new Vue({
+				render: h => h(App)
+			}).$mount('#app1');
+		}
 	});;
 
 	$.ajax({
-		url: '/article/listquery',
+		url: Global.reqDomain + '/article/listquery',
 		data: {
 			ps: '2',
 			pn: Global.searchObj.page || '1'

@@ -15,5 +15,6 @@ var searchObj = (function(){
 	
 
 module.exports = {
+	reqDomain: GLOBALOPTS.requestDomain || '',
 	searchObj: searchObj
 };

@@ -6,3 +6,6 @@
 ## I don't get the vue 
 	render template components import require 
 in webpack 3.4.1.   so I decided create a webpack 2.0 branch to write. 8-3 
+## fixed it. The reseaon is the words of template and exports spell wrong.
+
+## webpack build and backend use different server.

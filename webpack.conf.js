@@ -11,7 +11,7 @@ var pjPath = CONFIG.pj;
 var srcPath = CONFIG.srcPath;
 var destPath = CONFIG.destPath;
 var DEBUG = CONFIG.debug;
-var PORT = CONFIG.port;
+var PORT = DEBUG? CONFIG.devPort : CONFIG.port;
 
 var curJsDestPath = path.join(destPath, 'js');
 
@@ -48,7 +48,10 @@ var getHtmlPlugins = function(){
         //@inject 要把script插入到标签里
         var opt = {
             template: pageDefaultSetting.template,
-            DEBUG: DEBUG,
+            params: {
+                DEBUG: DEBUG,
+                requestDomain: DEBUG? ('http://localhost:' + PORT) : ''
+            },
             filename: item + '.html',
             chunks: ['vendors', item],
             inject: 'body'

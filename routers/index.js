@@ -5,19 +5,31 @@ var User = require('../models/user.js')
 var Article = require('../models/article.js')
 
 router.use(function(req, res, next){
-    if(req.session.username){
+    if(req.session.userInfo){
         User.findOne({
-        	username: req.session.username
+        	username: req.session.userInfo.username
         }).then(function(userInfo){
-        	if()
+        	if(!userInfo){
+        		delete req.session.userInfo
+        	}else{
+        		console.log('已登陆' + JSON.stringify(userInfo))
+        	}
+        	next();
         })
+    }else{
+    	next();
     }
 });
 
 router.get('/user/checklogin', function(req, res){
+	var isLogin = 'userInfo' in req.session;
+	var username = isLogin ? req.session.userInfo.username : ''
 	res.json({
 		err: '0',
-		data: req.session.isLogin
+		data: {
+			isLogin: isLogin,
+			  // : username
+		}
 	})
 });
 
@@ -32,7 +44,7 @@ router.post('/user/login', function(req, res) {
 		username: username
 	}).then(function(userInfo) {
 		if (userInfo) {
-			req.session.username = username;
+			req.session.userInfo = userInfo;
 			result = {
 				err: '0'
 			}

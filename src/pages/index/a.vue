@@ -41,7 +41,7 @@
 				switch(this.tab){
 					case '0':
 					$.ajax({
-						url: '/user/login',
+						url: Global.reqDomain +'/user/login',
 						type: 'post',
 						data: {
 							username: me.username,
@@ -59,7 +59,7 @@
 
 					case '1':
 					$.ajax({
-						url: '/user/register',
+						url: Global.reqDomain + '/user/register',
 						type: 'post',
 						data: {
 							username: me.username,
