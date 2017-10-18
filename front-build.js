@@ -15,7 +15,7 @@ var config = require(configPath);
 
 var compiler = webpack(config);
 
-var PORT = CONFIG.devPort;
+var devPort = CONFIG.devPort;
 
 // if( CONFIG.debug){
     /*为什么这里的路径要配成 ./public 呢*/
@@ -44,7 +44,7 @@ var PORT = CONFIG.devPort;
 //     app.use(express.static( path.resolve(__dirname, CONFIG.destPath)));
 // }
 
-app.listen(PORT, function () {
-  console.log('Server listening at port', PORT);
+app.listen(devPort, function () {
+  console.log('Server listening at port', devPort);
 });
  

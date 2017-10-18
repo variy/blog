@@ -50,7 +50,7 @@ var getHtmlPlugins = function(){
             template: pageDefaultSetting.template,
             params: {
                 DEBUG: DEBUG,
-                requestDomain: DEBUG? ('http://localhost:' + PORT) : ''
+                requestDomain: DEBUG? ('http://localhost:' + CONFIG.port) : ''
             },
             filename: item + '.html',
             chunks: ['vendors', item],
