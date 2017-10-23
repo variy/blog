@@ -18,7 +18,6 @@ var compiler = webpack(config);
 var devPort = CONFIG.devPort;
 
 // if( CONFIG.debug){
-    /*为什么这里的路径要配成 ./public 呢*/
     app.use(express.static(path.resolve(__dirname, CONFIG.srcPath)));
     app.use(webpackDevMiddleware(compiler, {
         publicPath: config.output.publicPath,

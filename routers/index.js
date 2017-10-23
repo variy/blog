@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router();
-
 var User = require('../models/user.js')
 var Article = require('../models/article.js')
 
+
 router.use(function(req, res, next){
+	console.log('tokenId>>>'+req.cookies)
     if(req.session.userInfo){
         User.findOne({
         	username: req.session.userInfo.username
@@ -17,6 +18,7 @@ router.use(function(req, res, next){
         	next();
         })
     }else{
+
     	next();
     }
 });
@@ -28,25 +30,26 @@ router.get('/user/checklogin', function(req, res){
 		err: '0',
 		data: {
 			isLogin: isLogin,
-			  // : username
+			username: username
 		}
 	})
 });
 
-router.post('/user/login', function(req, res) {
-	console.log(req.body);
+router.get('/user/login', function(req, res) {
 
-	var username = req.body.username;
-	var password = req.body.password;
+	var username = req.query.username;
+	var password = req.query.password;
 	var result = {};
-	console.log(username)
 	User.findOne({
 		username: username
 	}).then(function(userInfo) {
 		if (userInfo) {
 			req.session.userInfo = userInfo;
 			result = {
-				err: '0'
+				err: '0',
+				data: {
+					tokenId  : 'abcdefg'
+				}
 			}
 		} else {
 			result = {
@@ -54,18 +57,15 @@ router.post('/user/login', function(req, res) {
 				msg: '用户名或密码错误'
 			}
 		}
-
 		res.json(result);
 	});
 });
 
 router.post('/user/register', function(req, res) {
-	console.log(req.body);
 
 	var username = req.body.username;
 	var password = req.body.password;
 	var result = {};
-	console.log(username)
 	User.findOne({
 		username: username
 	}).then(function(userInfo) {
@@ -100,6 +100,27 @@ router.use(function(req, res, next){
 	Article.count({}, function(err, c){
 		articleCount = c;
 		next();
+	});
+});
+
+router.get('/user/listquery', function(req, res){
+	User.find().then(function(result){
+		var data = {};
+		if(result){
+			data = {
+				err: '0',
+				data: {
+					list: result
+				}
+			}
+		}else{
+			data = {
+				err: '0',
+				data: []
+			}
+		}
+
+		res.json(data);
 	});
 });
 router.get('/article/listquery', function(req, res){
@@ -139,7 +160,6 @@ router.get('/article/listquery', function(req, res){
 
 router.get('/article/query', function(req, res){
 	var id = req.query.id;
-
 	Article.findOne({
 		_id: id
 	}).then(function(result){

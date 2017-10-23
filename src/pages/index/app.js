@@ -6,13 +6,16 @@ $(function() {
 	$.ajax({
 		url: Global.reqDomain + '/user/checklogin',
 	}).done(function(data){
-		if(data.data.isLogin){
-
-		}else{
-			new Vue({
-				render: h => h(App)
-			}).$mount('#app1');
-		}
+		new Vue({
+			template: '<login-info :isLogin="isLogin" :username="username"></login-info>',
+			data: {
+				isLogin: data.data.isLogin,
+				username: data.data.username
+			},
+			components: {
+				'login-info': App
+			},
+		}).$mount('#app1');
 	});;
 
 	$.ajax({

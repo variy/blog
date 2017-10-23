@@ -11,7 +11,7 @@ var pjPath = CONFIG.pj;
 var srcPath = CONFIG.srcPath;
 var destPath = CONFIG.destPath;
 var DEBUG = CONFIG.debug;
-var PORT = DEBUG? CONFIG.devPort : CONFIG.port;
+var PORT = CONFIG.port;
 
 var curJsDestPath = path.join(destPath, 'js');
 
