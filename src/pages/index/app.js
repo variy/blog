@@ -1,10 +1,13 @@
-import App from './a.vue';
 let headerTpl = require('./header-nav');
 var  ArticleList = require('./article-list.vue');
-var Dialog = require('../../components/dialog');
- new Dialog;
+var  userInfo = require('./user-info.vue');
+
 $(function() {
 	$('#header').html(headerTpl())
+	$('.login-btn').click(function(){
+		require('../../components/login-dialog/index.js')();
+
+	})
 	$.ajax({
 		url: Global.reqDomain + '/user/checklogin',
 	}).done(function(data){
@@ -15,9 +18,9 @@ $(function() {
 				username: data.data.username
 			},
 			components: {
-				'login-info': App
+				'login-info': userInfo
 			},
-		}).$mount('#app1');
+		}).$mount('#header-userinfo-area');
 	});;
 
 	$.ajax({
@@ -40,6 +43,10 @@ $(function() {
 				}
 			}).$mount('#article-box');
 		}
-	})
+	});
+
+	
+
+
 
 });

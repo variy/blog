@@ -1,5 +1,5 @@
 <template>
-	<div v-if="!isLogin">
+	<div>
 	    <div class="txt-c mrb-12">
 	        <div class="btn-group">
 	            <button type="button"class="btn btn-default" v-bind:class="{'btn-primary':tab== 0}" @click="tab='0'">登陆</button>
@@ -16,15 +16,11 @@
 	    </div>
 	    <button type="button" class="btn btn-default pull-right" @click="submit">确定</button>
 	</div>
-	<div v-else>
-		亲爱的{{ username}},<a href="./manager.html">进入后台管理</a>
-	</div>
 </template>
 <script>
 	module.exports = {
 		name: 'app',
 		props: {
-			isLogin: Boolean,
 			username: String
 		},
 		data: function(){

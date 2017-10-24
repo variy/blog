@@ -4,7 +4,6 @@ var maxZindex = 99;
 var defaultSettings = {
 	title: '',
 	body: '',
-	footer: [],
 	hasCloseBtn: true,
 	afterclose: function(){
 
@@ -23,6 +22,7 @@ var btnDefaultSettings = {
 }
 var O = function(opts){
 	var options = _.extend(defaultSettings, opts);
+	options.footer = options.footer || [];
 	for(var i=0; i<options.footer.length; i++){
 		var btnOpt = options.footer[i];
 		btnOpt = _.extend(btnDefaultSettings, btnOpt)
@@ -35,19 +35,21 @@ var O = function(opts){
 }
 
 O.prototype.render = function() {
+	console.log(document.body.scrollHeigh)
 	this.$el = $('<div class="dialog-box"></div>');
 	this.$el.height(document.body.scrollHeight);
 	this.$el.width(document.body.scrollWidth);
 	this.$el.css('z-index', ++maxZindex);
 
 	var html = tpl(this.options);
+	debugger;
 	this.$el.html(html).appendTo('body');
 
 	('beforeshow' in  this.options) && this.options.beforeshow(this)
 
 	this.contentEl = this.$el.find('.dialog-content');
 	this.closeBtn = this.$el.find('.dialog-close');
-
+	this.btnGroup = this.$el.find('.dialog-footer');
 	var wW = window.innerWidth;
 	var wH = window.innerHeight;
 	this.contentEl.css({
@@ -60,7 +62,11 @@ O.prototype.animated = function() {
 	var me = this;
 	this.closeFn = function(){
 		me.contentEl.removeClass('fadeInDown').addClass('fadeOutUp');
-		me.contentEl.on
+		var fn = function(){
+			me.$el.remove();
+			me.contentEl.off('webkitAnimationEnd animationend', fn);
+		}
+		me.contentEl.on('webkitAnimationEnd animationend', fn);
 	}
 
 	this.showFn = function(){

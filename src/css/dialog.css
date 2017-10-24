@@ -164,9 +164,9 @@
 .dialog-content {
     position: relative;
     left: 50%;
-    margin-left: -47%;
+    /*margin-left: -47%;*/
     top:30%;
-    width: 94%;
+    min-width: 400px;
     max-width: 7rem;
     opacity: 0;
     box-sizing: border-box;

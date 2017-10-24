@@ -1,5 +1,8 @@
 require('./css/bootstrap.css');
+require('./css/dialog.css');
 require('./css/index.css');
+
+var Dialog = require('./components/dialog');
 
 var searchObj = (function(){
 	var obj = {};
@@ -16,5 +19,6 @@ var searchObj = (function(){
 
 module.exports = {
 	reqDomain: GLOBALOPTS.requestDomain || '',
-	searchObj: searchObj
+	searchObj: searchObj,
+	Dialog: Dialog
 };
