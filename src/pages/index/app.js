@@ -1,8 +1,10 @@
 import App from './a.vue';
+let headerTpl = require('./header-nav');
 var  ArticleList = require('./article-list.vue');
-
+var Dialog = require('../../components/dialog');
+ new Dialog;
 $(function() {
-
+	$('#header').html(headerTpl())
 	$.ajax({
 		url: Global.reqDomain + '/user/checklogin',
 	}).done(function(data){

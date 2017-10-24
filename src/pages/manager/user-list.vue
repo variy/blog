@@ -16,7 +16,7 @@
 				<td>{{ item.username}}</td>
 				<td>{{ item._id}}</td>
 				<td>{{ item.password}}</td>
-				<td>99</td>
+				<td>{{ item.authority}}</td>
 				<td>
 	  				<button type="button" class="btn btn-default btn-sm">修改</button>
 	  				<button type="button" class="btn btn-default btn-sm">XXX</button>

@@ -1,0 +1,19 @@
+<div class="dialog-backdrop"></div>
+<div class="dialog-content-box">
+	<div class="dialog-content">
+		<% if(hasCloseBtn){%>
+			<button type="button" class="dialog-close">&times;</button>
+		<% }%>
+		<div class="dialog-header">
+			<h2><%= title%></h2>
+		</div>
+		<div class="dialog-body"><%= body%></div>
+		<div class="dialog-footer">
+			<% footer.forEach(function(item, i){ %>
+				<button type="button" data-index="<%= i%>" class="btn btn-<%= item.style%>">
+					<%= item.txt%>
+				</button>
+			<% }) %>
+		</div>
+	</div>
+</div>

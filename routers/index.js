@@ -35,6 +35,16 @@ router.get('/user/checklogin', function(req, res){
 	})
 });
 
+router.get('/user/logout', function(req, res){
+	delete req.session.userInfo;
+	res.json({
+		err: '0',
+		data: {
+			
+		}
+	})
+})
+
 router.get('/user/login', function(req, res) {
 
 	var username = req.query.username;
