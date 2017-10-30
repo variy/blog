@@ -1,8 +1,9 @@
 let headerTpl = require('./header-nav');
 var  ArticleList = require('./article-list.vue');
 var  userInfo = require('./user-info.vue');
-
+var taskEditTpl = require('./task-edit');
 $(function() {
+	
 	$('#header').html(headerTpl())
 	$('.login-btn').click(function(){
 		require('../../components/login-dialog/index.js')();
@@ -23,30 +24,53 @@ $(function() {
 		}).$mount('#header-userinfo-area');
 	});;
 
-	$.ajax({
-		url: Global.reqDomain + '/article/listquery',
-		data: {
-			ps: '2',
-			pn: Global.searchObj.page || '1'
-		}
-	}).done(function(data){
-		if(data.err === '0'){
-			var result = data.data;
-			new Vue({
-				template: '<article-list :articles = "articles" :pageCount="pageCount"></article-list>',
-				data: {
-					articles: result.list,
-					pageCount: result.pc
-				},
-				components: {
-				  'article-list': ArticleList
-				}
-			}).$mount('#article-box');
-		}
+	$('<div class="container"></div>').html(taskEditTpl).appendTo('body');
+	$('.form_datetime').datetimepicker({
+        language:  'zh-CN',
+        format: 'yyyy-mm-dd',
+        startDate: new Date(),
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        minView: 2
+        // showMeridian: 1
+    });
+
+	$('.task-save-btn').click(function(){
+		$.ajax({
+			url: '/task/saveitem',
+			data: {
+				title: '',
+				dateTime: '',
+				content: ''
+			}
+		}).done(function(){
+			debugger;
+		})
 	});
 
-	
-
-
-
+	// $.ajax({
+	// 	url: Global.reqDomain + '/article/listquery',
+	// 	data: {
+	// 		ps: '2',
+	// 		pn: Global.searchObj.page || '1'
+	// 	}
+	// }).done(function(data){
+	// 	if(data.err === '0'){
+	// 		var result = data.data;
+	// 		new Vue({
+	// 			template: '<article-list :articles = "articles" :pageCount="pageCount"></article-list>',
+	// 			data: {
+	// 				articles: result.list,
+	// 				pageCount: result.pc
+	// 			},
+	// 			components: {
+	// 			  'article-list': ArticleList
+	// 			}
+	// 		}).$mount('#article-box');
+	// 	}
+	// });
 });

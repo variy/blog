@@ -42,7 +42,6 @@ O.prototype.render = function() {
 	this.$el.css('z-index', ++maxZindex);
 
 	var html = tpl(this.options);
-	debugger;
 	this.$el.html(html).appendTo('body');
 
 	('beforeshow' in  this.options) && this.options.beforeshow(this)

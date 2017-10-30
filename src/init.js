@@ -1,7 +1,11 @@
 require('./css/bootstrap.css');
+require('./css/bootstrap-datetimepicker.css');
 require('./css/dialog.css');
 require('./css/index.css');
 
+require('./libs/bootstrap.js');
+require('./libs/bootstrap-datetimepicker.js');
+require('./libs/bootstrap-datetimepicker.zh-CN.js');
 var Dialog = require('./components/dialog');
 
 var searchObj = (function(){

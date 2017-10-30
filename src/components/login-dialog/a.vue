@@ -20,13 +20,12 @@
 <script>
 	module.exports = {
 		name: 'app',
-		props: {
-			username: String
-		},
 		data: function(){
 			return {
 				tab: '0',
-				password: ''
+				password: '',
+				username: ''
+
 			}
 		},
 		created: function(){
