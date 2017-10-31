@@ -1,0 +1,39 @@
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var ObjectId = Schema.Types.ObjectId;
+
+var taskScheMa = new Schema({
+	date: Date,
+	title: String,
+	isFinished: Boolean,
+	from: {
+		type: ObjectId,
+		ref: 'User'
+	},
+	content: String,
+	meta: {
+		createAt: {
+			type: Date,
+			default: Date.now()
+		},
+		updateAt: {
+			type: Date,
+			default: Date.now()
+		}
+	}
+
+});
+
+taskScheMa.pre('save', function(next){
+	if(this.isNew){
+		this.meta.createAt = this.meta.updateAt = Date.now();
+	}else{
+		this.meta.updateAt = Date.now()
+	}
+
+	next();
+});
+
+module.exports = taskScheMa;
+
+module.exports = taskScheMa;

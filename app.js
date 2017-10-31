@@ -5,6 +5,7 @@ var webpack = require('webpack');
 var mongoose = require('mongoose');
 // var cors = require('cors');
 var path = require('path');
+var fs = require('fs');
 var webpackDevMiddleware = require('webpack-dev-middleware');
 var webpackHotMiddleware = require('webpack-hot-middleware');
 var webpackConf = require('./webpack.conf.js');
@@ -12,7 +13,6 @@ var webpackConf = require('./webpack.conf.js');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
-var Article = require('./models/article');
 
 mongoose.Promise = global.Promise;
 
@@ -52,7 +52,26 @@ app.use(function(req, res, next){
     }
     next();
 });
+// models loading
+var models_path = __dirname + '/app/models'
+var walk = function(path) {
+  fs
+    .readdirSync(path)
+    .forEach(function(file) {
+      var newPath = path + '/' + file
+      var stat = fs.statSync(newPath)
 
+      if (stat.isFile()) {
+        if (/(.*)\.(js|coffee)/.test(file)) {
+          require(newPath)
+        }
+      }
+      else if (stat.isDirectory()) {
+        walk(newPath)
+      }
+    })
+}
+walk(models_path)
 app.use(require(routerPath));
 
 var compiler = webpack(webpackConf);
@@ -79,6 +98,7 @@ app.use(webpackHotMiddleware(compiler, {
 mongoose.connect('mongodb://' + CONFIG.dbUri, {
     useMongoClient: true
 });
+
 var db = mongoose.connection;
 db.once('open', function(){
     app.listen(PORT, function () {

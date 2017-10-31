@@ -3,9 +3,8 @@
 	"verbose": false,
 	"watch": [
 		"app.js",
-		"models/",
-		"routers/",
-		"schmas/"
+		"app/",
+		"routers/"
 	],
 	"ignore": [
 		"node_modules/",
