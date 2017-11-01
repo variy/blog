@@ -1,14 +1,16 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
-console.log(User.findOne)
 exports.checkLogin = function(req, res){
 	var isLogin = 'userInfo' in req.session;
+	var userInfo = req.session.userInfo;
 	var username = isLogin ? req.session.userInfo.username : ''
 	res.json({
 		err: '0',
 		data: {
 			isLogin: isLogin,
-			username: username
+			username: username,
+			isAdmin: isLogin && userInfo.role > 10
+
 		}
 	})
 };
@@ -25,7 +27,8 @@ exports.login = function(req, res) {
 			result = {
 				err: '0',
 				data: {
-					tokenId  : 'abcdefg'
+					tokenId  : 'abcdefg',
+					isAdmin: userInfo.role > 10
 				}
 			}
 		} else {
@@ -78,7 +81,16 @@ exports.register = function(req, res) {
 
 	});
 };
-
+exports.list = function(req, res){
+	User.find({}).then(function(list){
+		res.json({
+			err: '0',
+			data: {
+				list: list
+			}
+		})
+	})
+}
 // middleware
 exports.signinRequired = function(req, res, next) {
 	var user = req.session.userInfo;
@@ -90,4 +102,17 @@ exports.signinRequired = function(req, res, next) {
 		})
 	}
 	next()
-}
+};
+
+exports.adminRequire = function(req, res, next) {
+	var user = req.session.userInfo;
+
+	if (user.role <= 10) {
+		return res.json({
+			err: '997',
+			msg: '用户权限不足'
+		})
+	}
+
+	next()
+};

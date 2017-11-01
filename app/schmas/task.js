@@ -34,6 +34,16 @@ taskScheMa.pre('save', function(next){
 	next();
 });
 
-module.exports = taskScheMa;
+taskScheMa.statics = {
+	fetch: function(cb){
+		return this.find({})
+			.sort('meta.updateAt')
+			.then(cb);
+	},
+	findByUser: function(id, cb){
+		return this.find({from: id})
+			.then(cb);
+	}
+}
 
 module.exports = taskScheMa;

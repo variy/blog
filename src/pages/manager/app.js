@@ -6,14 +6,19 @@ $(function(){
 	$.ajax({
 		url: '/user/listquery'
 	}).done(function(data){
-		new Vue({
-			template: '<user-list :list="list"></user-list>',
-			data: {
-				list: data.data.list
-			},
-			components: {
-				'user-list': userCom
-			}
-		}).$mount('#page-container')
+		if(data.err === '0'){
+			new Vue({
+				template: '<user-list :list="list"></user-list>',
+				data: {
+					list: data.data.list
+				},
+				components: {
+					'user-list': userCom
+				}
+			}).$mount('#page-container')
+		}else{
+			alert(data.msg)
+		}
+		
 	})
 })

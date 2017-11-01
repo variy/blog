@@ -1,9 +1,8 @@
 var mongoose = require('mongoose');
 var Task = mongoose.model('Task');
-
+var _ = require('underscore');
 exports.save = function(req, res){
-	var _task = req.body.task;
-	var cid = req.body.cid;
+	var cid = req.query.cid;
 
 	if(cid){
 		res.json({
@@ -11,7 +10,10 @@ exports.save = function(req, res){
 			msg: '这是编辑'
 		})
 	}else{
-		var task = new Task(_task);
+		var obj = _.extend(req.query, {
+			from: req.session.userInfo._id
+		})
+		var task = new Task(obj);
 		task.save(function(err, task){
 			if(err)console.log(err);
 			res.json({
@@ -20,4 +22,13 @@ exports.save = function(req, res){
 			})
 		})
 	}
+}
+
+exports.list = function(req, res){
+	Task.findByUser(req.session.userInfo._id, function(list){
+		res.json({
+			err: '0',
+			data: list
+		})
+	})
 }

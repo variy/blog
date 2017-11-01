@@ -4,7 +4,10 @@ var Schema = mongoose.Schema;
 var userScheMa = new Schema({
 	username: String,
 	password: String,
-	authority: Number
+	role: {
+		type: Number,
+		default: 0
+	}
 
 });
 

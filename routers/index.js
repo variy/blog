@@ -13,7 +13,12 @@ router.get('/user/login', User.login);
 
 router.post('/user/register', User.register);
 
+router.get('/user/listquery', User.signinRequired, User.adminRequire, User.list);
+
 router.get('/task/saveitem', User.signinRequired, Task.save);
+
+router.get('/task/query', User.signinRequired, Task.list);
+ 
 
 // var pageNum = 0;
 // var pageSize = 2;

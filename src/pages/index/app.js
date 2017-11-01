@@ -43,12 +43,11 @@ $(function() {
 		$.ajax({
 			url: '/task/saveitem',
 			data: {
-				title: '',
-				dateTime: '',
-				content: ''
+				title: '这是title',
+				date: '2017-11-01',
+				content: '这是内容'
 			}
 		}).done(function(){
-			debugger;
 		})
 	});
 
