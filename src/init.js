@@ -19,10 +19,14 @@ var searchObj = (function(){
 	}
 	return obj;
 })();
-	
+
+setTimeout(function(){
+	require('./router.js')
+}, 0);	
 
 module.exports = {
 	reqDomain: GLOBALOPTS.requestDomain || '',
 	searchObj: searchObj,
-	Dialog: Dialog
+	Dialog: Dialog,
+	eventHub: new Vue
 };

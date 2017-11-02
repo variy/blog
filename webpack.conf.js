@@ -172,7 +172,7 @@ var webpackConfig = {
     //     }
     // },
     resolve: {
-        extensions: ['.js', '.ejs', 'jsx', 'css'],
+        extensions: ['.js', '.ejs', 'jsx', 'css', 'vue'],
         // modules: [CONFIG.rootPath],
         alias: {
             underscore$: path.join( CONFIG.srcPath, '/libs/underscore.js'),

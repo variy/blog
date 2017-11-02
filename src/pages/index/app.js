@@ -3,7 +3,11 @@ var  ArticleList = require('./article-list.vue');
 var  userInfo = require('./user-info.vue');
 var taskEditTpl = require('./task-edit');
 $(function() {
-	
+	$.ajax({
+		url: '/task/query'
+	}).done(function(){
+		
+	})
 	$('#header').html(headerTpl())
 	$('.login-btn').click(function(){
 		require('../../components/login-dialog/index.js')();
@@ -39,17 +43,6 @@ $(function() {
         // showMeridian: 1
     });
 
-	$('.task-save-btn').click(function(){
-		$.ajax({
-			url: '/task/saveitem',
-			data: {
-				title: '这是title',
-				date: '2017-11-01',
-				content: '这是内容'
-			}
-		}).done(function(){
-		})
-	});
 
 	// $.ajax({
 	// 	url: Global.reqDomain + '/article/listquery',
