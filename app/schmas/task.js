@@ -5,7 +5,7 @@ var ObjectId = Schema.Types.ObjectId;
 var taskScheMa = new Schema({
 	date: Date,
 	title: String,
-	isFinished: Boolean,
+	done: Boolean,
 	from: {
 		type: ObjectId,
 		ref: 'User'

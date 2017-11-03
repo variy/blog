@@ -1,4 +1,4 @@
-var taskListData = require('../data/tasks');
+// var taskListData = require('../data/tasks');
 var optsMap = {
     'all': {
         opts: require('./all-model'),
@@ -52,7 +52,7 @@ O.prototype.toggleType = function(type){
 }
 
 O.prototype.initData = function(id, opts){
-    var target = _.findWhere(this.originList, {id: id});
+    var target = _.findWhere(this.originList, {_id: id});
     for(var attr in opts){
         target[attr] = opts[attr];
     }
@@ -61,7 +61,7 @@ O.prototype.initData = function(id, opts){
     this.listData = _initData(this.validList, this.opts);
 }
 
-module.exports = new O(taskListData, 'all');
+module.exports = O;
 
 
 

@@ -41,17 +41,6 @@ app.use(session({
     }
 }));
 
-
-app.use(function(req, res, next){
-    if(!req.session.views){
-        console.log('不存在views')
-        req.session.views = {};
-    }else{
-        console.log('--存在views')
-
-    }
-    next();
-});
 // models loading
 var models_path = __dirname + '/app/models'
 var walk = function(path) {

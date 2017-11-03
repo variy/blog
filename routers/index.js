@@ -18,7 +18,9 @@ router.get('/user/listquery', User.signinRequired, User.adminRequire, User.list)
 router.get('/task/saveitem', User.signinRequired, Task.save);
 
 router.get('/task/query', User.signinRequired, Task.list);
- 
+
+router.get('/task/queryitem', User.signinRequired, Task.queryitem);
+
 
 // var pageNum = 0;
 // var pageSize = 2;

@@ -5,7 +5,7 @@
 				<span class="input-group-addon">
 					<input type="checkbox" v-model="isFinished">
 				</span>
-			    <input class="form-control task-edit-date-input" size="16" type="text" value="" readonly>
+			    <input class="form-control task-edit-date-input" size="16" type="text" :value="date">
 			    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 				<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 			</div>
@@ -27,17 +27,18 @@
 			_isFinished: Boolean,
 			_title: String,
 			_content: String,
-			id: String
+			id: String,
+			date: String
 		},
 		data: function(){
 			return {
 				isFinished: false, 
 				title: '', 
-				content: '',
-				date: ''
+				content: ''
 			}
 		},
 		created: function(){
+			$('.task-edit-date-input').val(this.date);
 			this.isFinished = this._isFinished || false;
 			this.title = this._title || '';
 			this.content = this._content || '';
@@ -51,13 +52,14 @@
 						title: me.title,
 						date: $('.task-edit-date-input').val(),
 						content: me.content,
-						id: me.id
+						id: me.id,
+						done: me.isFinished
 					}
 				}).done(function(data){
 					if(data.err === '0'){
-						debugger;
-						location.hash='';
-						location.reload();
+
+						// location.hash='';
+						// location.reload();
 					}else{
 						alert(data.msg);
 					}

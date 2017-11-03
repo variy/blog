@@ -3,6 +3,7 @@ module.exports = {
         txt: '已过期',
         _filter: function(list) {
             return list.filter(function(item) {
+                if(!item.date)return false;
                 var now = new Date();
                 var then = new Date(item.date);
                 var isBefore = then.getTime() < now.getTime();
@@ -23,19 +24,29 @@ module.exports = {
         txt: '明天',
         _filter: function(list) {
             return list.filter(function(item) {
+                if(!item.date)return false;
                 var now  = new Date();
                 now.setDate(now.getDate() + 1);
                 var tomString = now.toDateString();
-                return new Date(item.date).toDateString() === tomString;
+                return !item.done && (new Date(item.date).toDateString() === tomString);
             });
         }
     },
     // lastDay7: {
     //     txt: ' 接下来7天'
     // },
-    // last: {
-    //     txt: '以后'
-    // },
+    last: {
+        txt: '更远以后',
+        _filter: function(list){
+            return list.filter(function(item) {
+                if(!item.date)return false;
+                var now  = new Date();
+                now.setDate(now.getDate() + 1);
+                var tomString = now.getTime();
+                return !item.done && (new Date(item.date).getTime() > tomString);
+            });
+        }
+    },
     noDate: {
         txt: '无日期',
         _filter: function(list) {

@@ -3,11 +3,7 @@ var  ArticleList = require('./article-list.vue');
 var  userInfo = require('./user-info.vue');
 var taskEditTpl = require('./task-edit');
 $(function() {
-	$.ajax({
-		url: '/task/query'
-	}).done(function(){
-		
-	})
+	
 	$('#header').html(headerTpl())
 	$('.login-btn').click(function(){
 		require('../../components/login-dialog/index.js')();
@@ -29,20 +25,6 @@ $(function() {
 	});;
 
 	$('<div class="container"></div>').html(taskEditTpl).appendTo('body');
-	$('.form_datetime').datetimepicker({
-        language:  'zh-CN',
-        format: 'yyyy-mm-dd',
-        startDate: new Date(),
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		forceParse: 0,
-        minView: 2
-        // showMeridian: 1
-    });
-
 
 	// $.ajax({
 	// 	url: Global.reqDomain + '/article/listquery',
