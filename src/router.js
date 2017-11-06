@@ -6,58 +6,41 @@ var category = {};
 
 var el = document.getElementById('stage');
 var moment = require('moment');
-window.Vue = Vue;
 routie({
 	'': function(){
-		window.vue;
-		$.ajax({
-			url: '/task/query'
-		}).done(function(result) {
+		var cb = function(result){
 			var list = result.data.map(function(item){
 				delete item.meta;
 				return item;
 			});
-			console.log(JSON.stringify(list))
 			category = new Category(list, 'all')
 			var list = category.listData;
-			vue = new Vue({
+			var vue = new Vue({
 				template: '<index :list="list"></index>',
 				components: {
 					'index': indexComp
-				},
-				created: function(){
-					// category = new Category(list, 'all')
-					// this.list = category.listData;
 				},
 				data: {
 					list: list
 				}
 			});
-
 			$(el).empty();
 			el.appendChild(vue.$mount().$el);
-
+		};
+		$.ajax({
+			url: '/task/query'
+		}).done(function(result) {
+			cb(result);
 			Global.eventHub.$on('toggleDone', function(opt) {
 	            $.ajax({
 	                url: '/task/saveitem',
 	                data: opt
 	            }).done(function(data){
 	                if(data.err === '0'){
-	                	// location.reload();
 	                	$.ajax({
 							url: '/task/query'
 						}).done(function(result) {
-							var list = result.data.map(function(item){
-								delete item.meta;
-								return item;
-							});
-							debugger;
-							category = new Category(list, 'all')
-							var list = category.listData;
-							for(var attr in list){
-								// (vue.$data.list)[attr] = list[attr]
-								Vue.set(vue.$data.list, attr, list[attr])
-							}
+							cb(result);
 						});
 	                }
 	            });
@@ -89,14 +72,15 @@ routie({
 				title: '',
 				date: '',
 				content: '',
-				id: ''
+				id: '',
+				repeatType: 'none'
 			};
 			if(result.date){
 				result.date = moment(result.date).format('YYYY-MM-DD');
 			}
 			result.id = result._id;
 			var vue = new Vue({
-				template: '<task-edit :_isFinished="done" :_title="title" :date="date" :_content="content" :id = "id"></task-edit>',
+				template: '<task-edit :_isFinished="done" :_title="title" :date="date" :_content="content" :id = "id" :repeatType="repeatType"></task-edit>',
 				components: {
 					'task-edit': taskEditComp
 				},

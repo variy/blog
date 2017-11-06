@@ -1,0 +1,7 @@
+var o = {
+	
+}
+
+module.exports = {
+	
+}

@@ -18,3 +18,16 @@
 h3 {
 	font-size: 15px;
 }
+
+.task-item {
+	margin-top: 16px;
+}
+
+#stage {
+	padding-left: 22px;
+}
+
+.width-a {
+	width: auto;
+	display: inline-block;
+}

@@ -60,14 +60,11 @@ exports.list = function(req, res){
 }
 
 exports.queryitem = function(req, res){
-	var opt = req.query;
-	var id = opt.id;
-	delete opt.id;
-	Task.findOne({id: req.query.id}).then(function(user){
-		if(user){
+	Task.findOne({_id: req.query.id}).then(function(task){
+		if(task){
 			res.json({
 				err: '0',
-				data: user
+				data: task
 			});
 		}else{
 			res.json({
@@ -76,4 +73,10 @@ exports.queryitem = function(req, res){
 			})
 		}
 	});
+}
+
+exports.delItem = function(req, res){
+	res.json({
+		
+	})
 }

@@ -36,7 +36,7 @@ module.exports = {
     //     txt: ' 接下来7天'
     // },
     last: {
-        txt: '更远以后',
+        txt: '以后',
         _filter: function(list){
             return list.filter(function(item) {
                 if(!item.date)return false;

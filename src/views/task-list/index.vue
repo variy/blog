@@ -1,17 +1,14 @@
 <template>
     <div>
-        <div id="add-task-area">
-            <input type="text" placeholder="添加任务">
-            <button type="button">确认</button>
-        </div>
         <div class="tasks-area" id="tasks-area">
-            <div class="task-collection-item" v-for="item in list">
+            <div class="task-collection-item" v-for="item in list" v-show="item.list.length > 0">
                 <h3>{{ item.txt}}</h3>
                 <div class="task-coll-content">
                     <tasklist :list="item.list"></tasklist>
                 </div>
             </div>
         </div>
+        <a type="button" class="btn btn-primary task-add-btn" href="#!task-edit/0">增加任务</a>
     </div>
 </template>
 <script>

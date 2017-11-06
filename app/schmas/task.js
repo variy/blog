@@ -6,6 +6,10 @@ var taskScheMa = new Schema({
 	date: Date,
 	title: String,
 	done: Boolean,
+	repeatType: {
+		type: String,
+		default: 'none'
+	},
 	from: {
 		type: ObjectId,
 		ref: 'User'

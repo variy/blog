@@ -21,7 +21,7 @@ router.get('/task/query', User.signinRequired, Task.list);
 
 router.get('/task/queryitem', User.signinRequired, Task.queryitem);
 
-
+router.delete('/task/del', User.signinRequired, Task.delItem);
 // var pageNum = 0;
 // var pageSize = 2;
 // var articleCount = '';
