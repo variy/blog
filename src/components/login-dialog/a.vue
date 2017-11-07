@@ -29,7 +29,12 @@
 			}
 		},
 		created: function(){
-			
+			var me = this;
+			$(document).keydown(function(e){
+				if(e.keyCode === 13){
+					me.submit.call(me);
+				}
+			})
 		},
 		methods: {
 			submit: function(){

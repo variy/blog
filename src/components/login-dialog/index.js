@@ -1,7 +1,6 @@
 
 module.exports = function(){
 	var App = require('./a.vue');
-
 	new Global.Dialog({
 		body: '<div id="login-dialog-box"></div>',
 		beforeshow: function(){

@@ -84,9 +84,8 @@
 					}
 				}).done(function(data){
 					if(data.err === '0'){
-
-						// location.hash='';
-						// location.reload();
+						alert('保存成功');
+						location.hash='';
 					}else{
 						alert(data.msg);
 					}

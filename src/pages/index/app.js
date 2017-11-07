@@ -1,30 +1,38 @@
 let headerTpl = require('./header-nav');
 var  ArticleList = require('./article-list.vue');
 var  userInfo = require('./user-info.vue');
-var taskEditTpl = require('./task-edit');
+var loginFn = require('../../components/login-dialog/index.js');
 $(function() {
 	
 	$('#header').html(headerTpl())
 	$('.login-btn').click(function(){
-		require('../../components/login-dialog/index.js')();
+		loginFn();
 
 	})
 	$.ajax({
 		url: Global.reqDomain + '/user/checklogin',
 	}).done(function(data){
-		new Vue({
-			template: '<login-info :isLogin="isLogin" :username="username"></login-info>',
-			data: {
-				isLogin: data.data.isLogin,
-				username: data.data.username
-			},
-			components: {
-				'login-info': userInfo
-			},
-		}).$mount('#header-userinfo-area');
+		if(data.err === '0'){
+			if(data.data.isLogin){
+				new Vue({
+					template: '<login-info :isLogin="isLogin" :username="username"></login-info>',
+					data: {
+						isLogin: data.data.isLogin,
+						username: data.data.username
+					},
+					components: {
+						'login-info': userInfo
+					},
+				}).$mount('#header-userinfo-area');
+			}else{
+				loginFn();
+			}
+			
+		}else{
+			alert(data.msg)
+		}
+		
 	});;
-
-	$('<div class="container"></div>').html(taskEditTpl).appendTo('body');
 
 	// $.ajax({
 	// 	url: Global.reqDomain + '/article/listquery',

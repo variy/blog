@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 var Task = mongoose.model('Task');
 var _ = require('underscore');
 exports.save = function(req, res){
-	console.log(req.query)
 
 	var cid = req.query.id;
 	var opt = req.query;
@@ -11,7 +10,6 @@ exports.save = function(req, res){
 		Task.findOne({
 			_id: cid
 		}).then(function(user){
-			console.log(user)
 
 			if(user){
 				user.update(opt, function(err, raw){
@@ -51,7 +49,6 @@ exports.list = function(req, res){
 			delete item.meta;
 			return item;
 		});
-		console.log(JSON.stringify(newList))
 		res.json({
 			err: '0',
 			data: newList
@@ -76,7 +73,18 @@ exports.queryitem = function(req, res){
 }
 
 exports.delItem = function(req, res){
-	res.json({
+	var id = req.body.id;
+	if(id){
+		Task.remove({_id: id}, function(err){
+			if(err)console.log(err);
+			res.json({
+				err: '0'
+			})
+		});
+	}else{
+		res.json({
+			err: '400'
+		})
+	}
 		
-	})
 }
