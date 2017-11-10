@@ -172,14 +172,15 @@ var webpackConfig = {
     //     }
     // },
     resolve: {
-        extensions: ['.js', '.ejs', 'jsx', 'css', 'vue'],
+        extensions: ['.js', '.ejs', '.jsx', '.css', '.vue'],
         // modules: [CONFIG.rootPath],
         alias: {
             underscore$: path.join( CONFIG.srcPath, '/libs/underscore.js'),
             Jquery$: path.join( CONFIG.srcPath, '/libs/jquery-3.2.1.js'),
             Global$: path.join( CONFIG.srcPath, '/init.js'),
-            Vue$: path.join( CONFIG.srcPath, '/libs/vue.js')
-
+            Vue$: path.join( CONFIG.srcPath, '/libs/vue.js'),
+            // DEBUG ? '/libs/echarts.js':
+            echarts$: path.join( CONFIG.srcPath,  '/libs/echarts.common.min.js')
         }
     },
     plugins: [

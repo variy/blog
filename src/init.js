@@ -21,7 +21,7 @@ var searchObj = (function(){
 })();
 
 setTimeout(function(){
-	require('./router.js')
+	require('./components/header-nav')	
 }, 0);	
 
 module.exports = {
