@@ -1,5 +1,8 @@
 <template>
 	<div>
+		<p>
+			<a type="button" class="btn btn-primary expense-add-btn" href="./expense-edit.html">增加消费</a>
+		</p>
 		<div class="panel panel-default">
 			<div class="panel-heading">负债: <em>295,000</em>元</div>
 			<table class="table table-bordered">
@@ -51,7 +54,7 @@
 		</div>
 
 		<div class="panel panel-default">
-			<div class="panel-heading">别人欠我的钱：<em>61,600</em>元</div>
+			<div class="panel-heading">别人欠我的钱：<em>63,600</em>元</div>
 			<table class="table table-bordered">
 				<thead>
 					<tr>
@@ -77,14 +80,13 @@
 						<td>2017-11 月中还</td>
 					</tr>
 					<tr>
-						<td>张良</td>
-						<td>3,000</td>
-						<td>2017-11-17 还</td>
+						<td>黎富锋</td>
+						<td>5,000</td>
+						<td>2017-11-19 还</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
-	<a type="button" class="btn btn-primary expense-add-btn" href="#!expense-edit/0">增加消费</a>
 	</div>
 </template>
 <script>

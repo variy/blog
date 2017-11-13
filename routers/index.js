@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var User = require('../app/controllers/user.js')
 var Task = require('../app/controllers/task.js')
+var Expense = require('../app/controllers/expense.js')
 
 // var Article = require('../models/article.js')
 
@@ -22,6 +23,10 @@ router.get('/task/query', User.signinRequired, Task.list);
 router.get('/task/queryitem', User.signinRequired, Task.queryitem);
 
 router.delete('/task/del', User.signinRequired, Task.delItem);
+
+router.get('/expense/saveitem', User.signinRequired, Expense.save);
+router.get('/expense/query', User.signinRequired, Expense.list);
+
 // var pageNum = 0;
 // var pageSize = 2;
 // var articleCount = '';
