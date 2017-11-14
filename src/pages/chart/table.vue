@@ -12,7 +12,7 @@
 					<option value="week">近一周</option>
 					<option value="year">近一年</option>
 				</select>
-				<a href="./expense-edit.html" class="btn btn-default btn-sm pull-right">增加</a>
+				<a href="./expense-edit.html?genus=expend" class="btn btn-default btn-sm pull-right">增加</a>
 			</div>
 				<table class="table table-bordered table-condensed">
 					<thead>

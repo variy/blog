@@ -48,7 +48,7 @@
 		data: function(){
 			return {
 				title: '', 
-				bigC: Global.searchObj.genus || '',
+				bigC: Global.searchObj.genus || 'expend',
 				genus: Global.searchObj.genus,
 				categories: '',
 				date: '',
@@ -62,6 +62,8 @@
 			$('.task-edit-date-input').val(this.date);
 			this.title = this._title || '';
 			this.type = this._type || '';
+			this.categories = this.allList[this.bigC];
+
 		},
 		watch: {
 			'bigC': function(v){
