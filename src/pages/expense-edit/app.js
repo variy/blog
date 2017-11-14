@@ -1,4 +1,5 @@
 var expenseComp = require('./index');
+var moment = require('moment');
 var categories = [
 	{value: 'food', txt: '食物'},
 	{value: 'clothes', txt: '衣服'},
@@ -41,37 +42,62 @@ var allList = {
 
 }
 $(function() {
-	new Vue({
-		template: '<expense :_title="title" :bigCategories="map" :_content="content" :allList="allList"></expense>',
-		components: {
-			expense: expenseComp
-		},
-		data: {
-			title: 'test',
-			content: 'test content',
-			allList: allList,
-			map: map
-		}
-	}).$mount('#stage');
+	$(function(){
+	    var id = Global.searchObj.id;
+	    var cb = function(opts){
+	    	opts = opts || {};
+	    	var defaultOpts = {
+	    		date: moment(new Date).format('YYYY-MM-DD'),
+	    		title: '',
+	    		type: '',
+	    		allList: allList,
+	    		id: '',
+	    		amount: 0,
+	    		map: map
+	    	}
+	    	for(var attr in defaultOpts){
+	    		if(!(attr in opts)){
+	    			opts[attr] = defaultOpts[attr];
+	    		}
+	    	}
+    		new Vue({
+    			template: '<expense :_amount="amount" :_date="date" :_title="title" :bigCategories="map" :_type="type" :allList="allList"></expense>',
+    			components: {
+    				expense: expenseComp
+    			},
+    			data: opts
+    		}).$mount('#stage');
 
-	$('.form_datetime').datetimepicker({
-        language:  'zh-CN',
-        format: 'yyyy-mm-dd',
-        // startDate: new Date(),
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		forceParse: 0,
-        minView: 2
-        // showMeridian: 1
-    });
-
-    $.ajax({
-    	url: '/expense/query',
-    	success: function(data){
-    		console.log(data)
-    	}
-    })
+    		$('.form_datetime').datetimepicker({
+    	        language:  'zh-CN',
+    	        format: 'yyyy-mm-dd',
+    	        // startDate: new Date(),
+    	        weekStart: 1,
+    	        todayBtn:  1,
+    			autoclose: 1,
+    			todayHighlight: 1,
+    			startView: 2,
+    			forceParse: 0,
+    	        minView: 2
+    	        // showMeridian: 1
+    	    });
+	    }
+	    if( id){
+	        $.ajax({
+	            url: '/expense/queryitem',
+	            data: {
+	                id: id
+	            }
+	        }).done(function(data){
+	            if(data.err === '0'){
+	            	var result = data.data;
+	            	result.date = moment(result.date).format('YYYY-MM-DD')
+                	cb(result)
+	            }
+	        })
+	    }else{
+	    	cb({})
+	    }
+	});
+		
 })

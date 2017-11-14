@@ -1,32 +1,33 @@
+<style>
+	.form-group > div {
+		margin-top: 18px;
+	}
+
+</style>
 <template>
 	<div class="form-horizonta">	
 		<div class="form-group">
-			<div class="input-group date form_datetime col-md-5" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+			<div class="input-group date form_datetime col-md-5" data-date-format="dd MM yyyy - HH:ii p">
 			    <input class="form-control task-edit-date-input" size="16" type="text" :value="date">
 			    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 				<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 			</div>
-			<input type="hidden" id="dtp_input1" value="" /><br/>
 			<div class="input-group">
 				<span class="input-group-addon">标题</span>
 				<input class="form-control" v-model="title">
 			</div>
 			<div class="input-group">
 				<span class="input-group-addon">金额(元)</span>
-				<input class="form-control" type="number">
+				<input class="form-control" v-model="amount" type="number">
 			</div>
 			<div>
-				<select class="form-control width-a" v-model="bigC">
+				<select class="form-control width-a" v-model="bigC" :disabled="!!genus">
 					<option  v-for="item in bigCategories" :value="item.value">{{ item.txt}}</option>
 				</select>
-				<select class="form-control width-a" id="repeat-type-select" value="">
+				<select class="form-control width-a" id="repeat-type-select" v-model="type">
 					<option  v-for="item in categories" :value="item.value">{{ item.txt}}</option>
 				</select>
-					<button class="btn btn-default btn-xs pukk-right" type="button">类型编辑</button>
-			</div>
-				
-			<div class="input-group">
-				<textarea v-model="content"></textarea>
+					<button class="btn btn-default btn-xs pukk-right" disabled type="button">类型编辑</button>
 			</div>
 			<button type="button" class="btn btn-primary task-save-btn" @click="submit">保存</button>
 			<button v-if="!!id" type="button" class="btn btn-danger task-save-btn" @click="delTask(id)">删除</button>
@@ -37,25 +38,30 @@
 	module.exports = {
 		props: {
 			_title: String,
-			_content: String,
+			_type: String,
 			id: String,
-			date: String,
+			_date: String,
 			allList: Object,
-			bigCategories: Array
+			bigCategories: Array,
+			_amount: Number
 		},
 		data: function(){
 			return {
 				title: '', 
-				content: '',
-				bigC: '',
-				categories: ''
+				bigC: Global.searchObj.genus || '',
+				genus: Global.searchObj.genus,
+				categories: '',
+				date: '',
+				amount: '',
+				type: ''
 			}
 		},
 		created: function(){
+			this.amount = this._amount;
+			this.date = this._date;
 			$('.task-edit-date-input').val(this.date);
 			this.title = this._title || '';
-			this.content = this._content || '';
-			this.bigC = 'expend';
+			this.type = this._type || '';
 		},
 		watch: {
 			'bigC': function(v){
@@ -80,23 +86,30 @@
 			},
 			submit: function(){
 				var me = this;
-				 console.log($('#repeat-type-select').val());
-				$.ajax({
-					url: '/expense/saveitem',
-					data: {
-						title: me.title,
-						date: $('.task-edit-date-input').val(),
-						repeatType: $('#repeat-type-select').val(),
-						content: me.content,
-						id: me.id
-					}
-				}).done(function(data){
-					if(data.err === '0'){
-						alert('保存成功');
-					}else{
-						alert(data.msg);
-					}
-				})
+				console.log($('#repeat-type-select').val());
+				if(this.id){
+
+				}else{
+					$.ajax({
+						url: '/expense/saveitem',
+						data: {
+							title: me.title,
+							date: $('.task-edit-date-input').val(),
+							amount: me.amount,
+							type: me.type,
+							id: me.id,
+							type: me.type
+						}
+					}).done(function(data){
+						if(data.err === '0'){
+							alert('保存成功');
+							history.go('-1');
+						}else{
+							alert(data.msg);
+						}
+					})
+				}
+					
 			}
 		}
 	};

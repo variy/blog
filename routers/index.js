@@ -24,8 +24,13 @@ router.get('/task/queryitem', User.signinRequired, Task.queryitem);
 
 router.delete('/task/del', User.signinRequired, Task.delItem);
 
+//  
 router.get('/expense/saveitem', User.signinRequired, Expense.save);
 router.get('/expense/query', User.signinRequired, Expense.list);
+router.get('/expense/queryitem', User.signinRequired, Expense.queryitem);
+router.delete('/expense/del', User.signinRequired, Expense.delItem);
+
+
 
 // var pageNum = 0;
 // var pageSize = 2;

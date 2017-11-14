@@ -1,5 +1,32 @@
 var echarts = require('echarts');
 $('#stage').height('300px')
+var moment = require('moment');
+var biaoge = require('./table');
+
+$.ajax({
+    url: '/expense/query'
+}).done(function(data){
+    if(data.err === '0'){
+        var result = data.data;
+        result = result.map(function(item){
+            item.date = item.date ? moment(item.date).format('YYYY-MM-DD'): '';
+            return item;
+        })
+        var tabVue = new Vue({
+            template: '<biaoge :list="list"></biaoge>',
+            components: {
+                biaoge: biaoge
+            },
+            data: {
+                list: result
+            }
+        });
+
+        $('body').prepend($(tabVue.$mount().$el))
+    }
+})
+
+        
 // 基于准备好的dom，初始化echarts实例
 var myChart = echarts.init(document.getElementById('stage'));
 /*
@@ -139,4 +166,4 @@ option = {
 
 
         // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
+        // myChart.setOption(option);

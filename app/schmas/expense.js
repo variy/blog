@@ -5,9 +5,9 @@ var ObjectId = Schema.Types.ObjectId;
 var ScheMa = new Schema({
 	date: Date,
 	title: String,
-	amount: Boolean,
+	amount: Number,
 	category: String,
-	content: String,
+	type: String,
 	from: {
 		type: ObjectId,
 		ref: 'User'
