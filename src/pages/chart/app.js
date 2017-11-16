@@ -3,28 +3,14 @@ $('#stage').height('300px')
 var moment = require('moment');
 var biaoge = require('./table');
 
-$.ajax({
-    url: '/expense/query'
-}).done(function(data){
-    if(data.err === '0'){
-        var result = data.data;
-        result = result.map(function(item){
-            item.date = item.date ? moment(item.date).format('YYYY-MM-DD'): '';
-            return item;
-        })
-        var tabVue = new Vue({
-            template: '<biaoge :list="list"></biaoge>',
-            components: {
-                biaoge: biaoge
-            },
-            data: {
-                list: result
-            }
-        });
-
-        $('body').prepend($(tabVue.$mount().$el))
+var tabVue = new Vue({
+    template: '<biaoge></biaoge>',
+    components: {
+        biaoge: biaoge
     }
-})
+});
+
+$('body').prepend($(tabVue.$mount().$el))
 
         
 // 基于准备好的dom，初始化echarts实例

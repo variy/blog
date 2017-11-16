@@ -1,20 +1,71 @@
 <style>
 	.panel-heading {
+		position: relative;
 		overflow: hidden;
+	}
+	.over-h {
+		overflow: hidden;
+	}
+
+	.expend-decr {
+		margin-top: 12px;
+		text-indent: 2rem;
+	}
+	td {
+		max-width: 20%;
+	}
+	.vertical-table {
+		margin-top: 12px;
+		overflow: hidden;
+	}
+	.vertical-table-tr  {
+		display: inline-block;
+		border-left: 1px solid #ccc;
+		text-align: center;
+	}
+	.vertical-table-tr:last-child {
+		border-right: 1px solid #ccc;
+
+	}
+	.vertical-table-tr > p {
+		border-bottom: 1px solid #ccc;
+		margin: 0;
+		padding: 4px 6px;
+		
+	}
+
+	.vertical-table-tr > p:first-child {
+		border-top: 1px solid #ccc;
+		
 	}
 </style>
 <template>
 	<div class="container">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<select class="form-control width-a" v-model="dateQuery">
-					<option value="month">近一月</option>
-					<option value="week">近一周</option>
-					<option value="year">近一年</option>
-				</select>
-				<a href="./expense-edit.html?genus=expend" class="btn btn-default btn-sm pull-right">增加</a>
+				<div class="over-h">
+					近&nbsp;<select class="form-control width-a" v-model="dateQuery">
+						<option value="1">一月</option>
+						<option value="3">三个月</option>
+						<option value="6">六个月</option>
+						<option value="12">一年</option>
+						<option value="all">所有</option>
+					</select>&nbsp;&nbsp;
+					<a href="./expense-edit.html?genus=expend" class="btn btn-default btn-sm pull-right">增加</a>
+				</div>
+				<p class="expend-decr">
+					从{{from}}起，总花费：{{total}}元，其中:
+					<ul class="vertical-table">
+						<li v-for="item in sList" class="vertical-table-tr">
+							<p>{{item.type}}</p>
+							<p>{{item.count}}</p>
+							<p>{{ item.amount}}</p>
+						</li>
+					</ul>
+				</p>
+				
 			</div>
-				<table class="table table-bordered table-condensed">
+				<table class="table table-bordered table-condensed table-hover">
 					<thead>
 						<tr>
 							<th>日期</th>
@@ -25,14 +76,13 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr v-for="item in list">
+						<tr v-for="item in result" @click="goItem(item._id)">
 							<td>{{ item.date}}</td>
 							<td>{{ item.type}}</td>
 							<td>{{ item.amount}}</td>
 							<td>{{ item.title}}</td>
 							<td>
-				  				<button type="button" class="btn btn-default btn-xs" @click="goItem(item._id)">修改</button>
-								<button type="button" class="btn btn-danger btn-xs" @click="delItem(item._id)">删除</button>
+								<button type="button" class="btn btn-default btn-xs" @click="delItem(item._id)">删除</button>
 							</td>
 						</tr>
 					</tbody>
@@ -43,21 +93,82 @@
 
 </template>
 <script>
+	var getList = function(arr){
+		var newArr = [], obj = {};
+		arr.forEach(function(item){
+			if(obj[item.type]){
+				obj[item.type].amount += Number(item.amount);
+				obj[item.type].count++;
+
+			}else{
+				obj[item.type] = {
+					amount: item.amount,
+					count: 1
+				};
+
+			}
+		});
+		for(var attr in obj){
+			newArr.push({
+				type: attr,
+				amount: obj[attr].amount,
+				count: obj[attr].count
+			})
+		}
+		newArr.sort(function(a,b){
+			return a.amount < b.amount;
+		})
+		return newArr;
+	}
+	var moment = require('moment');
 	module.exports = {
-		props: {
-			list: Array
-		},
 		data: function(){
 			return {
-				dateQuery: 'month'
+				dateQuery: Global.searchObj.dateQuery || '1',
+				result: [],
+				from: '',
+				total: '',
+				sList: []
 			}
+		},
+		created: function(){
+			this.queryDate();
+
 		},
 		watch: {
 			dateQuery: function(v){
-				// location.search = '?range=' + v;
+				location.search = '?dateQuery=' + v;
+				// this.queryDate();
 			}
 		},
 		methods: {
+			queryDate: function(){
+				var me = this;
+				var now = moment(new Date).add('1', 'day').format('YYYY-MM-DD');		
+				this.from = moment().subtract(this.dateQuery, 'month').format('YYYY-MM-DD');
+
+				$.ajax({
+					url: '/expense/query',
+					data: {
+						from: me.from,
+						to: now
+					}
+				}).done(function(data){
+					if(data.err === '0'){
+						var result = data.data;
+						var total = 0;
+						result.map(function(item){
+							item.date = moment(item.date).format('YYYY-MM-DD');
+							item.type = PowerFn.parseExpense(item.type);
+							total += Number(item.amount);
+							return item;
+						});
+						me.sList = getList(result);
+						me.total = total;
+						me.result = result;
+					}
+				})
+			},
 			goItem: function(id){
 				location.href= 'expense-edit.html?genus=expend&id=' + id;
 			},

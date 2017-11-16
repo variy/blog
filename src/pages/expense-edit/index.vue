@@ -7,8 +7,8 @@
 <template>
 	<div class="form-horizonta">	
 		<div class="form-group">
-			<div class="input-group date form_datetime col-md-5" data-date-format="dd MM yyyy - HH:ii p">
-			    <input class="form-control task-edit-date-input" size="16" type="text" :value="date">
+			<div class="input-group date form_datetime col-md-5">
+			    <input class="form-control task-edit-date-input" size="16" type="text">
 			    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 				<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 			</div>
@@ -51,19 +51,19 @@
 				bigC: Global.searchObj.genus || 'expend',
 				genus: Global.searchObj.genus,
 				categories: '',
-				date: '',
 				amount: '',
 				type: ''
 			}
 		},
 		created: function(){
 			this.amount = this._amount;
-			this.date = this._date;
-			$('.task-edit-date-input').val(this.date);
 			this.title = this._title || '';
 			this.type = this._type || '';
 			this.categories = this.allList[this.bigC];
 
+		},
+		mounted: function(){
+			$('.task-edit-date-input').val(this._date);
 		},
 		watch: {
 			'bigC': function(v){
@@ -89,28 +89,25 @@
 			submit: function(){
 				var me = this;
 				console.log($('#repeat-type-select').val());
-				if(this.id){
-
-				}else{
-					$.ajax({
-						url: '/expense/saveitem',
-						data: {
-							title: me.title,
-							date: $('.task-edit-date-input').val(),
-							amount: me.amount,
-							type: me.type,
-							id: me.id,
-							type: me.type
-						}
-					}).done(function(data){
-						if(data.err === '0'){
-							alert('保存成功');
-							history.go('-1');
-						}else{
-							alert(data.msg);
-						}
-					})
-				}
+				$.ajax({
+					url: '/expense/saveitem',
+					data: {
+						title: me.title,
+						date: $('.task-edit-date-input').val(),
+						amount: me.amount,
+						type: me.type,
+						id: me.id,
+						type: me.type
+					}
+				}).done(function(data){
+					if(data.err === '0'){
+						alert('保存成功');
+						history.go('-1');
+					}else{
+						alert(data.msg);
+					}
+				})
+				
 					
 			}
 		}

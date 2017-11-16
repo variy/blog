@@ -1,16 +1,6 @@
 var expenseComp = require('./index');
 var moment = require('moment');
-var categories = [
-	{value: 'food', txt: '食物'},
-	{value: 'clothes', txt: '衣服'},
-	{value: 'static', txt: '固定支出'},
-	{value: 'play', txt: '玩儿'},
-	{value: 'quality', txt: '品质'},
-	{value: 'daily', txt: '日用品'},
-	{value: 'health', txt: '健康'},
-	{value: 'travel', txt: '旅行'},
 
-]
 var map = [
 	{value: 'expend', txt: '消费'},
 	{value: 'property', txt: '资产'},
@@ -27,6 +17,7 @@ var allList = {
 		{value: 'daily', txt: '日用品'},
 		{value: 'health', txt: '健康'},
 		{value: 'travel', txt: '旅行'},
+		{value: 'treat', txt: '请客吃饭'}
 	],
 	'property': [
 		{value: 'tuandaiwang', txt: 'tuandaiwang', amount: '200000'},
@@ -51,7 +42,7 @@ $(function() {
 	    		title: '',
 	    		type: '',
 	    		allList: allList,
-	    		id: '',
+	    		id: Global.searchObj.id,
 	    		amount: 0,
 	    		map: map
 	    	}
@@ -61,7 +52,7 @@ $(function() {
 	    		}
 	    	}
     		new Vue({
-    			template: '<expense :_amount="amount" :_date="date" :_title="title" :bigCategories="map" :_type="type" :allList="allList"></expense>',
+    			template: '<expense :id="id" :_amount="amount" :_date="date" :_title="title" :bigCategories="map" :_type="type" :allList="allList"></expense>',
     			components: {
     				expense: expenseComp
     			},

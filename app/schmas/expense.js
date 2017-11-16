@@ -38,11 +38,14 @@ ScheMa.pre('save', function(next){
 ScheMa.statics = {
 	fetch: function(cb){
 		return this.find({})
-			.sort('meta.updateAt')
+			.sort('date')
 			.then(cb);
 	},
-	findByUser: function(id, cb){
-		return this.find({from: id})
+	findByUser: function(opt, cb) {
+		return this.find({
+				from: opt.id,
+				date: opt.date
+			}).sort('date')
 			.then(cb);
 	}
 }

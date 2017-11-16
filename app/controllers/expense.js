@@ -44,8 +44,15 @@ exports.save = function(req, res){
 }
 
 exports.list = function(req, res){
-	Expense.findByUser(req.session.userInfo._id, function(list){
-		var newList = list.map(function(item){
+	
+	Expense.findByUser({
+		id: req.session.userInfo._id,
+		date: {
+			'$gte': new Date(req.query.from),
+			'$lt': new Date(req.query.to)
+		}
+	}, function(list) {
+		var newList = list.map(function(item) {
 			delete item.meta;
 			return item;
 		});

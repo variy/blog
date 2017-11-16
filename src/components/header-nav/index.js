@@ -7,6 +7,11 @@ $('.login-btn').click(function(){
 	loginFn();
 });
 
+var page = location.href.split('/').pop().split('.')[0];
+$('[data-link='+page+']').addClass('active');
+$('[data-link]').click(function(){
+	location.href = './' + $(this).data('link') + '.html';
+})
 $.ajax({
 	url: Global.reqDomain + '/user/checklogin',
 }).done(function(data){
