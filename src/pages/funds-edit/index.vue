@@ -22,7 +22,7 @@
 			    <input class="form-control task-edit-date-input" size="16" type="text">
 			</div>
 			<div class="input-group col-sm-4">
-				<span class="input-group-addon">金额</span>
+				<span class="input-group-addon">本金</span>
 				<input class="form-control" v-model="amount" type="number">
 			</div>
 			<div class="input-group col-sm-6">
@@ -30,8 +30,13 @@
 				<input type="text" class="form-control" v-model="title">
 			</div>
 			<div>
-				周期:<input class="inline-b mrl-10" v-model="cycle" style="width: 180px;"  type="range" step="1" min="0" max="24">
-				<span>&nbsp;&nbsp; {{ cycle}}月，{{ _date}}到期</span>
+				周期: &nbsp;{{ cycle}}月<input class="inline-b mrl-10" v-model="cycle" style="width: 180px;"  type="range" step="1" min="0" max="24">
+				<span> &nbsp;&nbsp;{{ _date}}到期</span>
+			</div>
+			<div class="input-group col-sm-4">
+				<span>年收益率(%): &nbsp;{{rate}}</span>
+				<input class="inline-b mrl-10" v-model="rate" style="width: 180px;"  type="range" step="1" min="3" max="15">
+				&nbsp;&nbsp;预计收益 2000元。
 			</div>
 			<div class="checkbox">
 				<label>
@@ -65,7 +70,8 @@
 				categories: '',
 				amount: '',
 				type: '',
-				cycle: 1
+				cycle: 1,
+				rate: ''
 			}
 		},
 		created: function(){
