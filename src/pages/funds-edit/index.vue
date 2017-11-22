@@ -30,7 +30,7 @@
 				<input type="text" class="form-control" v-model="title">
 			</div>
 			<div>
-				周期:<input class="inline-b mrl-10" v-model="cycle" style="width: 180px;"  type="range" step="1" min="01" max="24">
+				周期:<input class="inline-b mrl-10" v-model="cycle" style="width: 180px;"  type="range" step="1" min="0" max="24">
 				<span>&nbsp;&nbsp; {{ cycle}}月，{{ _date}}到期</span>
 			</div>
 			<div class="checkbox">
