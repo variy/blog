@@ -28,7 +28,7 @@
 			</table>
 		</div>
 		<p>
-			<a type="button" class="btn btn-primary expense-add-btn" href="./expense-edit.html?genus=funds">增加资产</a>
+			<a type="button" class="btn btn-primary expense-add-btn" href="./funds-edit.html?genus=funds">增加资产</a>
 		</p>
 		<div class="panel panel-default">
 			<div class="panel-heading">资产: <em>213,500</em>元</div>

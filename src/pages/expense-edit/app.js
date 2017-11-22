@@ -75,7 +75,7 @@ $(function() {
 	    }
 	    if( id){
 	        $.ajax({
-	            url: '/'+ Global.searchObj.genus	+'/queryitem',
+	            url: '/expense/queryitem',
 	            data: {
 	                id: id
 	            }

@@ -19,24 +19,24 @@
 			<div class="input-group date form_datetime col-sm-4">
 				<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 				<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-			    <input class="form-control task-edit-date-input" size="16" type="text">
+			    <input class="form-control task-edit-date-input" size="16" v-model="createdDate" type="text">
 			</div>
 			<div class="input-group col-sm-4">
 				<span class="input-group-addon">本金</span>
-				<input class="form-control" v-model="amount" type="number">
+				<input class="form-control" v-model="principal" type="number">
 			</div>
-			<div class="input-group col-sm-6">
+			<div class="input-group">
 				<span class="input-group-addon">备注</span>
 				<input type="text" class="form-control" v-model="title">
 			</div>
 			<div>
 				周期: &nbsp;{{ cycle}}月<input class="inline-b mrl-10" v-model="cycle" style="width: 180px;"  type="range" step="1" min="0" max="24">
-				<span> &nbsp;&nbsp;{{ _date}}到期</span>
+				<span> &nbsp;&nbsp;{{ finishedDate}}到期</span>
 			</div>
-			<div class="input-group col-sm-4">
-				<span>年收益率(%): &nbsp;{{rate}}</span>
-				<input class="inline-b mrl-10" v-model="rate" style="width: 180px;"  type="range" step="1" min="3" max="15">
-				&nbsp;&nbsp;预计收益 2000元。
+			<div class="input-group">
+				<span>年收益率: &nbsp;{{yieldRate}}%</span>
+				<input class="inline-b mrl-10" v-model="yieldRate" style="width: 180px;"  type="range" step="1" min="3" max="15">
+				&nbsp;&nbsp;预计收益 {{ yield}}元。
 			</div>
 			<div class="checkbox">
 				<label>
@@ -52,6 +52,7 @@
 	</div>
 </template>
 <script>
+	var moment = require('moment');
 	module.exports = {
 		props: {
 			_title: String,
@@ -71,7 +72,10 @@
 				amount: '',
 				type: '',
 				cycle: 1,
-				rate: ''
+				yieldRate: 5,
+				principal: 10000,
+				createdDate: '2017-11-01',
+				finishedDate: ''
 			}
 		},
 		created: function(){
@@ -79,18 +83,56 @@
 			this.title = this._title || '';
 			this.type = this._type || '';
 			this.categories = this.allList[this.bigC];
-
+			this.getFinishedDate();
+			this.getYield();
 		},
 		mounted: function(){
-			$('.task-edit-date-input').val(this._date);
+			var me = this;
+			// $('.task-edit-date-input').val(this._date);
+			$('.form_datetime').datetimepicker({
+    	        language:  'zh-CN',
+    	        format: 'yyyy-mm-dd',
+    	        // startDate: new Date(),
+    	        weekStart: 1,
+    	        todayBtn:  1,
+    			autoclose: 1,
+    			todayHighlight: 1,
+    			startView: 2,
+    			forceParse: 0,
+    	        minView: 2
+    	        // showMeridian: 1
+    	    }).on('changeDate', function(e){
+    	    	var date = moment(e.date).format('YYYY-MM-DD')
+    	    	me.createdDate = date;
+
+    	    });
 		},
 		watch: {
 			'bigC': function(v){
 				console.log(v);
 				this.categories = this.allList[v];
+			},
+			createdDate: function(){
+				this.getFinishedDate();
+			},
+			cycle: function(){
+				this.getFinishedDate();
+				this.getYield();
+			},
+			principal: function(){
+				this.getYield();
+			},
+			yieldRate: function(){
+				this.getYield();
 			}
 		},
 		methods: {
+			getFinishedDate: function(){
+				this.finishedDate = moment(this.createdDate).add(this.cycle, 'month').format('YYYY-MM-DD');
+			},
+			getYield: function(){
+				this.yield = Math.round(this.principal*(0.01*this.yieldRate/12)*this.cycle);
+			},
 			delTask: function(id){
 				$.ajax({
 					type: 'delete',

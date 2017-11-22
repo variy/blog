@@ -59,19 +59,7 @@ $(function() {
     			data: opts
     		}).$mount('#stage');
 
-    		$('.form_datetime').datetimepicker({
-    	        language:  'zh-CN',
-    	        format: 'yyyy-mm-dd',
-    	        // startDate: new Date(),
-    	        weekStart: 1,
-    	        todayBtn:  1,
-    			autoclose: 1,
-    			todayHighlight: 1,
-    			startView: 2,
-    			forceParse: 0,
-    	        minView: 2
-    	        // showMeridian: 1
-    	    });
+    		
 	    }
 	    if( id){
 	        $.ajax({

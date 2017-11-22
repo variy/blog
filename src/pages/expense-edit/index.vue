@@ -29,8 +29,10 @@
 				</select>
 					<button class="btn btn-default btn-xs pukk-right" disabled type="button">类型编辑</button>
 			</div>
-			<button type="button" class="btn btn-primary task-save-btn" @click="submit">保存</button>
-			<button v-if="!!id" type="button" class="btn btn-danger task-save-btn" @click="delTask(id)">删除</button>
+			<div class="btn-group">
+				<button type="button" class="btn btn-primary task-save-btn" @click="submit">保存</button>
+				<button v-if="!!id" type="button" class="btn btn-default task-save-btn" @click="delTask(id)">删除</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -89,43 +91,23 @@
 			submit: function(){
 				var me = this;
 				console.log($('#repeat-type-select').val());
-				if(this.bigC === 'expend'){
-					$.ajax({
-						url: '/expense/saveitem',
-						data: {
-							title: me.title,
-							date: $('.task-edit-date-input').val(),
-							amount: me.amount,
-							type: me.type,
-							id: me.id
-						}
-					}).done(function(data){
-						if(data.err === '0'){
-							alert('保存成功');
-							history.go('-1');
-						}else{
-							alert(data.msg);
-						}
-					})
-				}else if(this.bigC === 'funds'){
-					$.ajax({
-						url: '/funds/saveitem',
-						data: {
-							createdDate: $('.task-edit-date-input').val(),
-							principal: me.amount,
-							target: me.type,
-							id: me.id,
-							decribe: me.title
-						}
-					}).done(function(data){
-						if(data.err === '0'){
-							alert('保存成功');
-							history.go('-1');
-						}else{
-							alert(data.msg);
-						}
-					})
-				}
+				$.ajax({
+					url: '/expense/saveitem',
+					data: {
+						title: me.title,
+						date: $('.task-edit-date-input').val(),
+						amount: me.amount,
+						type: me.type,
+						id: me.id
+					}
+				}).done(function(data){
+					if(data.err === '0'){
+						alert('保存成功');
+						history.go('-1');
+					}else{
+						alert(data.msg);
+					}
+				})
 
 					
 				
