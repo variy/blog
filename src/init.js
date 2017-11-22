@@ -6,7 +6,6 @@ require('./css/index.css');
 require('./libs/bootstrap.js');
 require('./libs/bootstrap-datetimepicker.js');
 require('./libs/bootstrap-datetimepicker.zh-CN.js');
-var Dialog = require('./components/dialog');
 
 var searchObj = (function(){
 	var obj = {};
@@ -27,6 +26,5 @@ setTimeout(function(){
 module.exports = {
 	reqDomain: GLOBALOPTS.requestDomain || '',
 	searchObj: searchObj,
-	Dialog: Dialog,
 	eventHub: new Vue
 };

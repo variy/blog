@@ -3,7 +3,7 @@ var moment = require('moment');
 
 var map = [
 	{value: 'expend', txt: '消费'},
-	{value: 'property', txt: '资产'},
+	{value: 'funds', txt: '资产'},
 	{value: 'receivables', txt: '应收欠款'},
 
 ];
@@ -19,7 +19,7 @@ var allList = {
 		{value: 'travel', txt: '旅行'},
 		{value: 'treat', txt: '请客吃饭'}
 	],
-	'property': [
+	'funds': [
 		{value: 'tuandaiwang', txt: 'tuandaiwang', amount: '200000'},
 		{value: 'mayijubao', txt: 'mayijubao', amount: '20000'},
 	],
@@ -75,7 +75,7 @@ $(function() {
 	    }
 	    if( id){
 	        $.ajax({
-	            url: '/expense/queryitem',
+	            url: '/'+ Global.searchObj.genus	+'/queryitem',
 	            data: {
 	                id: id
 	            }

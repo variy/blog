@@ -36,7 +36,7 @@ var getEntry = function(){
         obj[item] =  path.join(srcPath, 'pages', item, pageDefaultSetting.entry);
 
     };
-    obj.vendors = ['Jquery','Vue','underscore', 'Global', 'PowerFn'];
+    obj.vendors = ['Jquery','Vue','underscore', 'Global', 'PowerFn' , 'Dialog'];
     return obj;
 }
 
@@ -180,6 +180,7 @@ var webpackConfig = {
             Global$: path.join( CONFIG.srcPath, '/init.js'),
             Vue$: path.join( CONFIG.srcPath, '/libs/vue.js'),
             PowerFn$: path.join( CONFIG.srcPath, '/power-fn.js'),
+            Dialog$: path.join( CONFIG.srcPath, '/components/dialog/index.js'),
             // DEBUG ? '/libs/echarts.js':
             echarts$: path.join( CONFIG.srcPath,  '/libs/echarts.common.min.js')
         }
@@ -205,7 +206,8 @@ var webpackConfig = {
             _: 'underscore',
             Global: 'Global',
             Vue: 'Vue',
-            PowerFn: 'PowerFn'
+            PowerFn: 'PowerFn',
+            Dialog: 'Dialog'
         })
     ].concat(getHtmlPlugins())
     .concat(otherPlugins)

@@ -3,6 +3,8 @@ var router = express.Router();
 var User = require('../app/controllers/user.js')
 var Task = require('../app/controllers/task.js')
 var Expense = require('../app/controllers/expense.js')
+var Funds = require('../app/controllers/funds.js')
+
 
 // var Article = require('../models/article.js')
 
@@ -24,12 +26,17 @@ router.get('/task/queryitem', User.signinRequired, Task.queryitem);
 
 router.delete('/task/del', User.signinRequired, Task.delItem);
 
-//  
+//消费
 router.get('/expense/saveitem', User.signinRequired, Expense.save);
 router.get('/expense/query', User.signinRequired, Expense.list);
 router.get('/expense/queryitem', User.signinRequired, Expense.queryitem);
 router.delete('/expense/del', User.signinRequired, Expense.delItem);
 
+//资金 
+router.get('/funds/saveitem', User.signinRequired, Funds.save);
+router.get('/funds/query', User.signinRequired, Funds.list);
+router.get('/funds/queryitem', User.signinRequired, Funds.queryitem);
+router.delete('/funds/del', User.signinRequired, Funds.delItem);
 
 
 // var pageNum = 0;

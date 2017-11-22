@@ -45,7 +45,7 @@ ScheMa.statics = {
 		return this.find({
 				from: opt.id,
 				date: opt.date
-			}).sort('date')
+			}).sort({'date': -1})
 			.then(cb);
 	}
 }

@@ -3,6 +3,15 @@ ul, li {
 	padding: 0;
 	margin: 0;
 }
+.mrl-10 {
+	margin-left: 10px;
+}
+.mrt-8 {
+	margin-top: 8px;
+}
+.mrt-12 {
+	margin-top: 12px;
+}
 .mrb-12 {
 	margin-bottom: 12px;
 }
@@ -31,7 +40,9 @@ h3 {
 #stage {
 	padding-left: 22px;
 }
-
+.inline-b {
+	display: inline-block!important;
+}
 .width-a {
 	width: auto;
 	display: inline-block;

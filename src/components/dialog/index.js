@@ -25,7 +25,11 @@ var O = function(opts){
 	options.footer = options.footer || [];
 	for(var i=0; i<options.footer.length; i++){
 		var btnOpt = options.footer[i];
-		btnOpt = _.extend(btnDefaultSettings, btnOpt)
+		for(var attr in btnDefaultSettings){
+			if(!(attr in btnOpt)){
+				btnOpt[attr] = btnDefaultSettings[attr]
+			}
+		}
 	}
 
 	this.options = options;
@@ -48,7 +52,7 @@ O.prototype.render = function() {
 
 	this.contentEl = this.$el.find('.dialog-content');
 	this.closeBtn = this.$el.find('.dialog-close');
-	this.btnGroup = this.$el.find('.dialog-footer');
+	this.btnGroup = this.$el.find('.dialog-footer > button');
 	var wW = window.innerWidth;
 	var wH = window.innerHeight;
 	this.contentEl.css({

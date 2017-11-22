@@ -23,6 +23,10 @@
 		border-left: 1px solid #ccc;
 		text-align: center;
 	}
+
+	.vertical-table-tr:hover, .vertical-table-tr.active  {
+		background-color: #eee;
+	}
 	.vertical-table-tr:last-child {
 		border-right: 1px solid #ccc;
 
@@ -56,7 +60,7 @@
 				<p class="expend-decr">
 					从{{from}}起，总花费：{{total}}元，其中:
 					<ul class="vertical-table">
-						<li v-for="item in sList" class="vertical-table-tr">
+						<li v-for="(item, index) in sList" :class="['vertical-table-tr', {active: item.active}]" @click="filterConsume(item.type, index)">
 							<p>{{item.type}}</p>
 							<p>{{item.count}}</p>
 							<p>{{ item.amount}}</p>
@@ -78,11 +82,11 @@
 					<tbody>
 						<tr v-for="item in result" @click="goItem(item._id)">
 							<td>{{ item.date}}</td>
-							<td>{{ item.type}}</td>
+							<td>{{ item.typeTxt}}</td>
 							<td>{{ item.amount}}</td>
 							<td>{{ item.title}}</td>
 							<td>
-								<button type="button" class="btn btn-default btn-xs" @click="delItem(item._id)">删除</button>
+								<button type="button" class="btn btn-default btn-xs" @click.stop="delItem(item._id)">删除</button>
 							</td>
 						</tr>
 					</tbody>
@@ -112,7 +116,8 @@
 			newArr.push({
 				type: attr,
 				amount: obj[attr].amount,
-				count: obj[attr].count
+				count: obj[attr].count,
+				active: false
 			})
 		}
 		newArr.sort(function(a,b){
@@ -128,7 +133,8 @@
 				result: [],
 				from: '',
 				total: '',
-				sList: []
+				sList: [],
+				filterIndex: -1
 			}
 		},
 		created: function(){
@@ -159,7 +165,7 @@
 						var total = 0;
 						result.map(function(item){
 							item.date = moment(item.date).format('YYYY-MM-DD');
-							item.type = PowerFn.parseExpense(item.type);
+							item.typeTxt = PowerFn.parseExpense(item.type);
 							total += Number(item.amount);
 							return item;
 						});
@@ -172,19 +178,43 @@
 			goItem: function(id){
 				location.href= 'expense-edit.html?genus=expend&id=' + id;
 			},
-			delItem: function(id){
-				$.ajax({
-					url: '/expense/del',
-					type: 'delete',
-					data: {
-						id: id
-					}
-				}).done(function(data){
-					if(data.err === '0'){
-						alert('删除成功');
-						location.reload();
-					}
+			filterConsume: function(type, i){
+				debugger;
+				if(this.filterIndex !== -1){
+					this.sList[this.filterIndex].active = false;
+				}
+				this.filterIndex = i;
+				this.sList[i].active = true;
+				// Vue.set(this.sList, 0, )
+			},
+			delItem: function(id, e){
+				new Dialog({
+					body: '确认删除?',
+					footer: [
+						{	
+							style: 'primary',
+							txt: '删除',
+							cb: function(){
+								$.ajax({
+									url: '/expense/del',
+									type: 'delete',
+									data: {
+										id: id
+									}
+								}).done(function(data){
+									if(data.err === '0'){
+										alert('删除成功');
+										location.reload();
+									}
+								})
+							}
+						},
+						{
+							txt: '取消'
+						}
+					]
 				})
+							
 			}
 		}
 	}

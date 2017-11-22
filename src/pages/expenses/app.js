@@ -1,9 +1,22 @@
 var index = require('./index');
 $(function() {
-	new Vue({
-		template: '<index></index>',
-		components: {
-			'index': index
-		}
-	}).$mount('#stage');
+		
+
+	$.ajax({
+		url: '/funds/query'
+	}).done(function(data){
+		var fundsList = data.data;
+		new Vue({
+			template: '<index :fundsList="fundsList"></index>',
+			components: {
+				'index': index
+			},
+			data: function(){
+				return {
+					fundsList: fundsList
+				}
+			}
+		}).$mount('#stage');
+
+	})
 })

@@ -89,24 +89,45 @@
 			submit: function(){
 				var me = this;
 				console.log($('#repeat-type-select').val());
-				$.ajax({
-					url: '/expense/saveitem',
-					data: {
-						title: me.title,
-						date: $('.task-edit-date-input').val(),
-						amount: me.amount,
-						type: me.type,
-						id: me.id,
-						type: me.type
-					}
-				}).done(function(data){
-					if(data.err === '0'){
-						alert('保存成功');
-						history.go('-1');
-					}else{
-						alert(data.msg);
-					}
-				})
+				if(this.bigC === 'expend'){
+					$.ajax({
+						url: '/expense/saveitem',
+						data: {
+							title: me.title,
+							date: $('.task-edit-date-input').val(),
+							amount: me.amount,
+							type: me.type,
+							id: me.id
+						}
+					}).done(function(data){
+						if(data.err === '0'){
+							alert('保存成功');
+							history.go('-1');
+						}else{
+							alert(data.msg);
+						}
+					})
+				}else if(this.bigC === 'funds'){
+					$.ajax({
+						url: '/funds/saveitem',
+						data: {
+							createdDate: $('.task-edit-date-input').val(),
+							principal: me.amount,
+							target: me.type,
+							id: me.id,
+							decribe: me.title
+						}
+					}).done(function(data){
+						if(data.err === '0'){
+							alert('保存成功');
+							history.go('-1');
+						}else{
+							alert(data.msg);
+						}
+					})
+				}
+
+					
 				
 					
 			}
