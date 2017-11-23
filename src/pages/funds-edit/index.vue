@@ -38,12 +38,6 @@
 				<input class="inline-b mrl-10" v-model="yieldRate" style="width: 180px;"  type="range" step="1" min="0" max="15">
 				&nbsp;&nbsp;预计：收益 {{ yield}}元，总收{{totalAmount}}元
 			</div>
-			<div class="checkbox">
-				<label>
-					<input type="checkbox"> 结清
-				</label>
-			</div>
-			
 			<div class="btn-group">
 				<button type="button" class="btn btn-primary task-save-btn" @click="submit">保存</button>
 				<button v-if="!!id" type="button" class="btn btn-default task-save-btn" @click="delTask(id)">删除</button>
@@ -76,9 +70,38 @@
 			}
 		},
 		created: function(){
+			var me = this;
 			this.categories = this.allList[this.bigC];
 			this.getFinishedDate();
 			this.getYield();
+			if(this.id){
+				$.ajax({
+					url: '/funds/queryitem',
+					data: {
+						id: me.id
+					}
+				}).done(function(data){
+					if(data.err === '0'){
+						var result = data.data;
+						var obj = {
+							principal: result.principal,
+							notes: result.notes, 
+							category: result.category,
+							cycle: result.cycle,
+							yieldRate: result.yieldRate,
+							createdDate: moment(result.createdDate).format('YYYY-MM-DD')
+						}
+						console.log(obj)
+						for(var attr in obj){
+							me[attr] = obj[attr];
+						}
+
+						me.thousPrincipal = PowerFn.commafy(me.principal);
+					}
+
+
+				})
+			}
 		},
 		mounted: function(){
 			var me = this;
@@ -137,7 +160,7 @@
 			delTask: function(id){
 				$.ajax({
 					type: 'delete',
-					url: '/task/del',
+					url: '/funds/del',
 					data: {
 						id: id
 					}
@@ -160,7 +183,7 @@
 						cycle: me.cycle,
 						yieldRate: me.yieldRate,
 						yield: me.yield,
-						evalTotalAmont: me.totalAmount,
+						evalTotalAmont: me.totalAmount.replace(/,/g, ''),
 						id: me.id,
 						notes: me.notes
 					}

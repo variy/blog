@@ -36,35 +36,23 @@
 				<thead>
 					<tr>
 						<th>对象</th>
-						<th>类型</th>
-						<th>金额</th>
-						<th>周期</th>
+						<th>总金</th>
+						<th>本金</th>
+						<th>利率(%)</th>
+						<th>创建日期</th>
+						<th>结束日期</th>
+						<th>周期(月)</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr v-for="item in fundsList" @click="goFundsItem(item._id)">
-						<td>{{ item.target}}</td>
+						<td>{{ item.category}}</td>
+						<td>{{ item.evalTotalAmont}}</td>
 						<td>{{ item.principal}}</td>
+						<td>{{ item.yieldRate}}</td>
 						<td>{{ item.createdDate}}</td>
-						<td>{{ item.principal}}</td>
-					</tr>
-					<tr>
-						<td>团贷网</td>
-						<td>p2p</td>
-						<td>185,000</td>
-						<td>周期长</td>
-					</tr>
-					<tr>
-						<td>蚂蚁聚宝</td>
-						<td>基金</td>
-						<td>25,000</td>
-						<td>周期较长</td>
-					</tr>
-					<tr>
-						<td>灵活资金</td>
-						<td>余额宝或现金</td>
-						<td>3500</td>
-						<td>无</td>
+						<td>{{ item.finishedDate}}</td>
+						<td>{{ item.cycle}}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -109,7 +97,7 @@
 		},
 		methods: {
 			goFundsItem: function(id){
-				location.href = './expense-edit.html?genus=funds&id=' + id;
+				location.href = './funds-edit.html?genus=funds&id=' + id;
 			}
 		}
 	}

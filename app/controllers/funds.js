@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Funds = mongoose.model('Funds');
+var moment = require('moment');
 var _ = require('underscore');
 exports.save = function(req, res){
 
@@ -50,6 +51,10 @@ exports.list = function(req, res){
 	Funds.findValid({
 		id: req.session.userInfo._id
 	}, function(list) {
+		var list = list.map(function(item){
+			item.createdDate = moment(item.createdDate).format('YYYY-MM-DD');
+			return item
+		})
 		res.json({
 			err: '0',
 			data: list

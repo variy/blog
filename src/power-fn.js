@@ -8,10 +8,18 @@ var expenseMap = {
 	'health': '健康',
 	'travel': '旅行',
 	'treat': '请客吃饭',
+};
+var fundsMap = {
+	'tuandaiwang': '团贷网',
+	'mayijubao': '蚂蚁聚宝',
+	'liudongzijin': '流动资金'
 }
 var o = {
 	parseExpense: function(v){
 		return expenseMap[v] || '';
+	},
+	parseFunds: function(v){
+		return fundsMap[v] || '';
 	},
 	commafy: function(num){
 		return (num || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');

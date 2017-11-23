@@ -1,22 +1,21 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
-
+var moment = require('moment');
 var ScheMa = new Schema({
-	// target: {
+	// category: {
 	// 	type: ObjectId,
 	// 	ref: 'invest'
 	// },
-	target: String,
-	principal: Number,
-	yieldRate: Number,
-	done: {
-		type: Boolean,
-		default: false
-	},
+	category: String,
 	createdDate: Date,
-	finishDate: Date,
-	describe: String,
+	finishedDate: Date,
+	principal: Number,
+	cycle: Number,
+	yieldRate: Number,
+	yield: Number,
+	evalTotalAmont: Number,
+	notes: String,
 	from: {
 		type: ObjectId,
 		ref: 'User'
@@ -40,15 +39,13 @@ ScheMa.pre('save', function(next){
 	}else{
 		this.meta.updateAt = Date.now()
 	}
-
 	next();
 });
 
 ScheMa.statics = {
 	findValid: function(opt, cb) {
 		return this.find({
-				from: opt.id,
-				done: false
+				from: opt.id
 			}).sort({'finishDate': -1})
 			.then(cb);
 	}
