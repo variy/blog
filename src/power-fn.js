@@ -12,6 +12,9 @@ var expenseMap = {
 var o = {
 	parseExpense: function(v){
 		return expenseMap[v] || '';
+	},
+	commafy: function(num){
+		return (num || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
 	}
 }
 

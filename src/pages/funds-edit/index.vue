@@ -11,7 +11,7 @@
 				<select class="form-control width-a" v-model="bigC" :disabled="!!genus">
 					<option  v-for="item in bigCategories" :value="item.value">{{ item.txt}}</option>
 				</select>&nbsp;&nbsp;
-				<select class="form-control width-a" id="repeat-type-select" v-model="type">
+				<select class="form-control width-a" id="repeat-type-select" v-model="category">
 					<option  v-for="item in categories" :value="item.value">{{ item.txt}}</option>
 				</select>
 				<button class="btn btn-default btn-xs pukk-right" disabled type="button">类型编辑</button>
@@ -23,11 +23,11 @@
 			</div>
 			<div class="input-group col-sm-4">
 				<span class="input-group-addon">本金</span>
-				<input class="form-control" v-model="principal" type="number">
+				<input class="form-control" :value="thousPrincipal" type="text" @keyup="commafy">
 			</div>
-			<div class="input-group">
+			<div class="input-group col-sm-4">
 				<span class="input-group-addon">备注</span>
-				<input type="text" class="form-control" v-model="title">
+				<input type="text" class="form-control" v-model="notes">
 			</div>
 			<div>
 				周期: &nbsp;{{ cycle}}月<input class="inline-b mrl-10" v-model="cycle" style="width: 180px;"  type="range" step="1" min="0" max="24">
@@ -35,8 +35,8 @@
 			</div>
 			<div class="input-group">
 				<span>年收益率: &nbsp;{{yieldRate}}%</span>
-				<input class="inline-b mrl-10" v-model="yieldRate" style="width: 180px;"  type="range" step="1" min="3" max="15">
-				&nbsp;&nbsp;预计收益 {{ yield}}元。
+				<input class="inline-b mrl-10" v-model="yieldRate" style="width: 180px;"  type="range" step="1" min="0" max="15">
+				&nbsp;&nbsp;预计：收益 {{ yield}}元，总收{{totalAmount}}元
 			</div>
 			<div class="checkbox">
 				<label>
@@ -55,44 +55,36 @@
 	var moment = require('moment');
 	module.exports = {
 		props: {
-			_title: String,
-			_type: String,
-			id: String,
-			_date: String,
 			allList: Object,
 			bigCategories: Array,
-			_amount: Number
 		},
 		data: function(){
 			return {
-				title: '', 
-				bigC: Global.searchObj.genus || 'expend',
+				bigC: Global.searchObj.genus || 'funds',
 				genus: Global.searchObj.genus,
-				categories: '',
-				amount: '',
-				type: '',
+				id: Global.searchObj.id || '',
+				principal: '',
+				categories: [],
+				notes: '', 
+				category: '',
 				cycle: 1,
-				yieldRate: 5,
-				principal: 10000,
-				createdDate: '2017-11-01',
-				finishedDate: ''
+				yieldRate: 8,
+				createdDate: moment(new Date).format('YYYY-MM-DD'),
+				finishedDate: '',
+				totalAmount: '',
+				thousPrincipal: ''
 			}
 		},
 		created: function(){
-			this.amount = this._amount;
-			this.title = this._title || '';
-			this.type = this._type || '';
 			this.categories = this.allList[this.bigC];
 			this.getFinishedDate();
 			this.getYield();
 		},
 		mounted: function(){
 			var me = this;
-			// $('.task-edit-date-input').val(this._date);
 			$('.form_datetime').datetimepicker({
     	        language:  'zh-CN',
     	        format: 'yyyy-mm-dd',
-    	        // startDate: new Date(),
     	        weekStart: 1,
     	        todayBtn:  1,
     			autoclose: 1,
@@ -127,11 +119,20 @@
 			}
 		},
 		methods: {
+			commafy: function(e){
+				var v = e.target.value;
+				v = Number(v.replace(/,/g, ''));
+				this.principal = v;
+				this.thousPrincipal = PowerFn.commafy(this.principal);
+			},
 			getFinishedDate: function(){
 				this.finishedDate = moment(this.createdDate).add(this.cycle, 'month').format('YYYY-MM-DD');
 			},
 			getYield: function(){
-				this.yield = Math.round(this.principal*(0.01*this.yieldRate/12)*this.cycle);
+				var totalRate = Math.pow(1 + 0.01*this.yieldRate, this.cycle/12);
+
+				this.yield = Math.round(this.principal*(totalRate-1));
+				this.totalAmount = PowerFn.commafy(Number(this.yield) + Number(this.principal));
 			},
 			delTask: function(id){
 				$.ajax({
@@ -149,48 +150,28 @@
 			},
 			submit: function(){
 				var me = this;
-				console.log($('#repeat-type-select').val());
-				if(this.bigC === 'expend'){
-					$.ajax({
-						url: '/expense/saveitem',
-						data: {
-							title: me.title,
-							date: $('.task-edit-date-input').val(),
-							amount: me.amount,
-							type: me.type,
-							id: me.id
-						}
-					}).done(function(data){
-						if(data.err === '0'){
-							alert('保存成功');
-							history.go('-1');
-						}else{
-							alert(data.msg);
-						}
-					})
-				}else if(this.bigC === 'funds'){
-					$.ajax({
-						url: '/funds/saveitem',
-						data: {
-							createdDate: $('.task-edit-date-input').val(),
-							principal: me.amount,
-							target: me.type,
-							id: me.id,
-							decribe: me.title
-						}
-					}).done(function(data){
-						if(data.err === '0'){
-							alert('保存成功');
-							history.go('-1');
-						}else{
-							alert(data.msg);
-						}
-					})
-				}
-
-					
-				
-					
+				$.ajax({
+					url: '/funds/saveitem',
+					data: {
+						category: me.category,
+						createdDate: me.createdDate,
+						finishedDate: me.finishedDate,
+						principal: me.principal,
+						cycle: me.cycle,
+						yieldRate: me.yieldRate,
+						yield: me.yield,
+						evalTotalAmont: me.totalAmount,
+						id: me.id,
+						notes: me.notes
+					}
+				}).done(function(data){
+					if(data.err === '0'){
+						alert('保存成功');
+						history.go('-1');
+					}else{
+						alert(data.msg);
+					}
+				})
 			}
 		}
 	};

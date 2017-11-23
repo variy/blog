@@ -2,26 +2,16 @@ var expenseComp = require('./index');
 var moment = require('moment');
 
 var map = [
-	{value: 'expend', txt: '消费'},
 	{value: 'funds', txt: '资产'},
 	{value: 'receivables', txt: '应收欠款'},
 
 ];
 var allList = {
-	'expend':[
-		{value: 'food', txt: '食物'},
-		{value: 'clothes', txt: '衣服'},
-		{value: 'static', txt: '固定支出'},
-		{value: 'play', txt: '玩儿'},
-		{value: 'quality', txt: '品质'},
-		{value: 'daily', txt: '日用品'},
-		{value: 'health', txt: '健康'},
-		{value: 'travel', txt: '旅行'},
-		{value: 'treat', txt: '请客吃饭'}
-	],
 	'funds': [
-		{value: 'tuandaiwang', txt: 'tuandaiwang', amount: '200000'},
-		{value: 'mayijubao', txt: 'mayijubao', amount: '20000'},
+		{value: 'tuandaiwang', txt: '团贷网', amount: '200000'},
+		{value: 'mayijubao', txt: '蚂蚁聚宝', amount: '20000'},
+		{value: 'receivables', txt: '应收欠款', amount: '48600'},
+		{value: 'valid', txt: '流动资金', amount: '3500'},
 	],
 	'receivables': [
 		{value: 'wangxingyao', txt: 'wangxingyao', amount: '33600'},
@@ -52,7 +42,7 @@ $(function() {
 	    		}
 	    	}
     		new Vue({
-    			template: '<expense :id="id" :_amount="amount" :_date="date" :_title="title" :bigCategories="map" :_type="type" :allList="allList"></expense>',
+    			template: '<expense :bigCategories="map" :allList="allList"></expense>',
     			components: {
     				expense: expenseComp
     			},
