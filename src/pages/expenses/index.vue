@@ -31,7 +31,7 @@
 			<a type="button" class="btn btn-primary expense-add-btn" href="./funds-edit.html?genus=funds">增加资产</a>
 		</p>
 		<div class="panel panel-default">
-			<div class="panel-heading">资产: <em>213,500</em>元</div>
+			<div class="panel-heading">资产: <em>{{ totalFunds}}</em>元</div>
 			<table class="table table-bordered table-hover">
 				<thead>
 					<tr>
@@ -47,7 +47,7 @@
 				<tbody>
 					<tr v-for="item in fundsList" @click="goFundsItem(item._id)">
 						<td>{{ item.category}}</td>
-						<td>{{ item.evalTotalAmont}}</td>
+						<td>{{ item.thousEvalTotalAmont}}</td>
 						<td>{{ item.principal}}</td>
 						<td>{{ item.yieldRate}}</td>
 						<td>{{ item.createdDate}}</td>
@@ -90,10 +90,16 @@
 			fundsList: Array
 		},
 		data: function(){
-			return {};
+			return {
+				totalFunds: ''
+			};
 		},
 		created: function(){
-
+			var totalFunds = 0;
+			this.fundsList.forEach(function(item){
+				totalFunds += Number(item.evalTotalAmont);
+			});
+			this.totalFunds = PowerFn.commafy(totalFunds);
 		},
 		methods: {
 			goFundsItem: function(id){

@@ -11,7 +11,7 @@ $(function() {
 			item.createdDate = moment(item.createdDate).format('YYYY-MM-DD');
 			item.finishedDate = moment(item.finishedDate).format('YYYY-MM-DD');
 			item.category = PowerFn.parseFunds(item.category);
-			item.evalTotalAmont = PowerFn.commafy(item.evalTotalAmont);
+			item.thousEvalTotalAmont = PowerFn.commafy(item.evalTotalAmont);
 			item.principal = PowerFn.commafy(item.principal);
 
 			return item;
