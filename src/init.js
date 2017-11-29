@@ -1,5 +1,7 @@
 require('./css/bootstrap.css');
 require('./css/bootstrap-datetimepicker.css');
+// require('./css/font-awesome.css');
+
 require('./css/dialog.css');
 require('./css/index.css');
 

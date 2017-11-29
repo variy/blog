@@ -76,7 +76,6 @@
 							<th>类型</th>
 							<th>金额</th>
 							<th>备注</th>
-							<th>操作</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -85,9 +84,6 @@
 							<td>{{ item.typeTxt}}</td>
 							<td>{{ item.amount}}</td>
 							<td>{{ item.title}}</td>
-							<td>
-								<button type="button" class="btn btn-default btn-xs" @click.stop="delItem(item._id)">删除</button>
-							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -188,32 +184,7 @@
 				// Vue.set(this.sList, 0, )
 			},
 			delItem: function(id, e){
-				new Dialog({
-					body: '确认删除?',
-					footer: [
-						{	
-							style: 'primary',
-							txt: '删除',
-							cb: function(){
-								$.ajax({
-									url: '/expense/del',
-									type: 'delete',
-									data: {
-										id: id
-									}
-								}).done(function(data){
-									if(data.err === '0'){
-										alert('删除成功');
-										location.reload();
-									}
-								})
-							}
-						},
-						{
-							txt: '取消'
-						}
-					]
-				})
+				
 							
 			}
 		}

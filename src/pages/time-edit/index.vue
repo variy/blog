@@ -5,7 +5,7 @@
 	.checkbox label {
 		display: block;
 		float: left;
-		width: 25%;
+		width: 20%;
 		margin: 0 12px 14px 0;
 	}
 </style>
@@ -16,15 +16,15 @@
 				<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 				<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 			    <input class="form-control task-edit-date-input" size="16" v-model="createdDate" type="text">
-			</div>
-			<div class="input-group col-sm-6 checkbox">
+			</div>{{ weekendTip}}
+			<div class="input-group col-sm-8 checkbox">
 				    <label v-for="item in list">
 			      		<input type="checkbox" :value="item.value">
 			      		<span :class="['glyphicon', 'glyphicon-' + item.icon]"></span> {{ item.txt}}
 				    </label>
 			</div>
 			<div class="input-group col-sm-4">
-				<span class="input-group-addon">备注</span>
+				<span class="input-group-addon">描述</span>
 				<input type="text" class="form-control" v-model="notes">
 			</div>
 			<div class="input-group col-sm-4">
@@ -46,26 +46,16 @@
 		},
 		data: function(){
 			return {
-				bigC: Global.searchObj.genus || 'funds',
-				genus: Global.searchObj.genus,
 				id: Global.searchObj.id || '',
-				principal: '',
-				categories: [],
 				notes: '', 
-				category: '',
-				cycle: 1,
-				yieldRate: 8,
 				createdDate: moment(new Date).format('YYYY-MM-DD'),
-				finishedDate: '',
-				totalAmount: '',
-				thousPrincipal: ''
+				weekendTip: '',
+				marks: ''
 			}
 		},
 		created: function(){
 			var me = this;
-			this.categories = this.allList[this.bigC];
-			this.getFinishedDate();
-			this.getYield();
+			this.getWeekendTip();
 			if(this.id){
 				$.ajax({
 					url: '/funds/queryitem',
@@ -115,44 +105,26 @@
     	    });
 		},
 		watch: {
-			'bigC': function(v){
-				console.log(v);
-				this.categories = this.allList[v];
-			},
 			createdDate: function(){
-				this.getFinishedDate();
-			},
-			cycle: function(){
-				this.getFinishedDate();
-				this.getYield();
-			},
-			principal: function(){
-				this.getYield();
-			},
-			yieldRate: function(){
-				this.getYield();
+				this.getWeekendTip();
 			}
 		},
 		methods: {
-			commafy: function(e){
-				var v = e.target.value;
-				v = Number(v.replace(/,/g, ''));
-				this.principal = v;
-				this.thousPrincipal = PowerFn.commafy(this.principal);
-			},
-			getFinishedDate: function(){
-				this.finishedDate = moment(this.createdDate).add(this.cycle, 'month').format('YYYY-MM-DD');
-			},
-			getYield: function(){
-				var totalRate = Math.pow(1 + 0.01*this.yieldRate, this.cycle/12);
+			getWeekendTip: function(){
+				var day = moment(this.createdDate).day();
+				if(day === 6){
+					this.weekendTip = '周六';
+				}else if(day === 0){
+					this.weekendTip = '周日'
+				}else{
+					this.weekendTip = '';
 
-				this.yield = Math.round(this.principal*(totalRate-1));
-				this.totalAmount = PowerFn.commafy(Number(this.yield) + Number(this.principal));
+				}
 			},
 			delTask: function(id){
 				$.ajax({
 					type: 'delete',
-					url: '/funds/del',
+					url: '/time/del',
 					data: {
 						id: id
 					}
@@ -166,7 +138,7 @@
 			submit: function(){
 				var me = this;
 				$.ajax({
-					url: '/funds/saveitem',
+					url: '/time/saveitem',
 					data: {
 						category: me.category,
 						createdDate: me.createdDate,

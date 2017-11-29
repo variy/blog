@@ -6,6 +6,7 @@ var expenseMap = {
 	'quality': '品质',
 	'daily': '日用品',
 	'health': '健康',
+	'date': '约会',
 	'travel': '旅行',
 	'treat': '请客吃饭',
 };

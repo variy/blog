@@ -75,18 +75,32 @@
 		},
 		methods: {
 			delTask: function(id){
-				$.ajax({
-					type: 'delete',
-					url: '/task/del',
-					data: {
-						id: id
-					}
-				}).done(function(data){
-					if(data.err === '0'){
-						alert('删除成功');
-						location.hash='';
-					}
-				})
+				new Dialog({
+					body: '确认删除?',
+					footer: [
+						{	
+							style: 'primary',
+							txt: '删除',
+							cb: function(){
+								$.ajax({
+									url: '/expense/del',
+									type: 'delete',
+									data: {
+										id: id
+									}
+								}).done(function(data){
+									if(data.err === '0'){
+										alert('删除成功');
+										history.go('-1');
+									}
+								})
+							}
+						},
+						{
+							txt: '取消'
+						}
+					]
+				});
 			},
 			submit: function(){
 				var me = this;

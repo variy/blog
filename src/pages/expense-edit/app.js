@@ -16,6 +16,7 @@ var allList = {
 		{value: 'quality', txt: '品质'},
 		{value: 'daily', txt: '日用品'},
 		{value: 'health', txt: '健康'},
+		{value: 'date', txt: '约会'},
 		{value: 'travel', txt: '旅行'},
 		{value: 'treat', txt: '请客吃饭'}
 	],
