@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="panel panel-default">
-			<div class="panel-heading">负债: <em>240,000</em>元</div>
+			<div class="panel-heading">负债: <em>211,000</em>元</div>
 			<table class="table table-bordered">
 				<thead>
 					<tr>
@@ -21,7 +21,7 @@
 					<tr>
 						<td>广发银行</td>
 						<td>银行借款</td>
-						<td>80,000</td>
+						<td>51,000</td>
 						<td>等额本息，每月12号</td>
 					</tr>
 				</tbody>

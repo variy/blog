@@ -2,7 +2,7 @@
 	.form-group > div {
 		margin-top: 18px;
 	}
-	.checkbox label {
+	.checkbox-list label {
 		display: block;
 		float: left;
 		width: 20%;
@@ -17,9 +17,9 @@
 				<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 			    <input class="form-control task-edit-date-input" size="16" v-model="createdDate" type="text">
 			</div>{{ weekendTip}}
-			<div class="input-group col-sm-8 checkbox">
-				    <label v-for="item in list">
-			      		<input type="checkbox" :value="item.value">
+			<div class="input-group col-sm-8 checkbox-list">
+				    <label v-for="item in taskList">
+			      		<input type="checkbox" :value="item.value" :checked="item.checked">
 			      		<span :class="['glyphicon', 'glyphicon-' + item.icon]"></span> {{ item.txt}}
 				    </label>
 			</div>
@@ -50,15 +50,23 @@
 				notes: '', 
 				createdDate: moment(new Date).format('YYYY-MM-DD'),
 				weekendTip: '',
-				marks: ''
+				marks: '',
+				tasks: []
 			}
 		},
 		created: function(){
 			var me = this;
 			this.getWeekendTip();
+
+			this.taskList = this.list.map(function(item){
+				if(me.tasks.indexOf(item.value) > -1){
+					item.checked = true;
+				}
+				return item;
+			});
 			if(this.id){
 				$.ajax({
-					url: '/funds/queryitem',
+					url: '/time/queryitem',
 					data: {
 						id: me.id
 					}
@@ -66,19 +74,15 @@
 					if(data.err === '0'){
 						var result = data.data;
 						var obj = {
-							principal: result.principal,
 							notes: result.notes, 
-							category: result.category,
-							cycle: result.cycle,
-							yieldRate: result.yieldRate,
-							createdDate: moment(result.createdDate).format('YYYY-MM-DD')
+							createdDate: moment(result.date).format('YYYY-MM-DD'),
+							marks: result.marks,
+							tasks: result.tasks
 						}
 						console.log(obj)
 						for(var attr in obj){
 							me[attr] = obj[attr];
 						}
-
-						me.thousPrincipal = PowerFn.commafy(me.principal);
 					}
 
 
@@ -107,6 +111,19 @@
 		watch: {
 			createdDate: function(){
 				this.getWeekendTip();
+			},
+			tasks: function(){
+				debugger;
+				var me = this;
+				this.taskList = this.list.map(function(item){
+					if(me.tasks.indexOf(item.value) > -1){
+						item.checked = true;
+					}
+					return item;
+				});
+			},
+			taskList: function(){
+				debugger;
 			}
 		},
 		methods: {
@@ -137,19 +154,18 @@
 			},
 			submit: function(){
 				var me = this;
+				var arr = [];
+				$('.checkbox-list input:checked').each(function(i, item){
+					arr.push($(this).val())
+				})
 				$.ajax({
 					url: '/time/saveitem',
 					data: {
-						category: me.category,
-						createdDate: me.createdDate,
-						finishedDate: me.finishedDate,
-						principal: me.principal,
-						cycle: me.cycle,
-						yieldRate: me.yieldRate,
-						yield: me.yield,
-						evalTotalAmont: me.totalAmount.replace(/,/g, ''),
+						date: me.createdDate,
 						id: me.id,
-						notes: me.notes
+						notes: me.notes,
+						tasks: arr,
+						marks: me.marks
 					}
 				}).done(function(data){
 					if(data.err === '0'){

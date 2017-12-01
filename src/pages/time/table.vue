@@ -55,15 +55,14 @@
 						<option value="12">一年</option>
 						<option value="all">所有</option>
 					</select>&nbsp;&nbsp;
-					<a href="./expense-edit.html?genus=expend" class="btn btn-default btn-sm pull-right">增加</a>
+					<a href="./time-edit.html" class="btn btn-default btn-sm pull-right">增加</a>
 				</div>
 				<p class="expend-decr">
-					从{{from}}起，总花费：{{total}}元，其中:
+					从{{from}}起，其中:
 					<ul class="vertical-table">
 						<li v-for="(item, index) in sList" :class="['vertical-table-tr', {active: item.active}]" @click="filterConsume(item.type, index)">
 							<p>{{item.type}}</p>
 							<p>{{item.count}}</p>
-							<p>{{ item.amount}}</p>
 						</li>
 					</ul>
 				</p>
@@ -73,17 +72,17 @@
 					<thead>
 						<tr>
 							<th>日期</th>
-							<th>类型</th>
-							<th>金额</th>
-							<th>备注</th>
+							<th>内容</th>
+							<th>描述</th>
+							<th>评分</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr v-for="item in result" @click="goItem(item._id)">
 							<td>{{ item.date}}</td>
-							<td>{{ item.expense.join(',')}}</td>
-							<td>{{ item.amount}}</td>
-							<td>{{ item.title}}</td>
+							<td>{{ item.tasks.join('，')}}</td>
+							<td>{{ item.notes}}</td>
+							<td>{{ item.marks}}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -94,30 +93,27 @@
 </template>
 <script>
 	var getList = function(arr){
+		var taskList = [];
 		var newArr = [], obj = {};
 		arr.forEach(function(item){
-			if(obj[item.type]){
-				obj[item.type].amount += Number(item.amount);
-				obj[item.type].count++;
-
+			taskList = taskList.concat(item.tasks);
+		});
+		taskList.forEach(function(item){
+			if(item in obj){
+				obj[item]++;
 			}else{
-				obj[item.type] = {
-					amount: item.amount,
-					count: 1
-				};
-
+				obj[item] = 1;
 			}
 		});
 		for(var attr in obj){
 			newArr.push({
 				type: attr,
-				amount: obj[attr].amount,
-				count: obj[attr].count,
+				count: obj[attr],
 				active: false
 			})
 		}
 		newArr.sort(function(a,b){
-			return a.amount < b.amount;
+			return a.count < b.count;
 		})
 		return newArr;
 	}
@@ -128,7 +124,6 @@
 				dateQuery: Global.searchObj.dateQuery || '1',
 				result: [],
 				from: '',
-				total: '',
 				sList: [],
 				filterIndex: -1
 			}
@@ -148,69 +143,34 @@
 				var me = this;
 				var now = moment(new Date).add('1', 'day').format('YYYY-MM-DD');		
 				this.from = moment().subtract(this.dateQuery, 'month').format('YYYY-MM-DD');
-
-				this.result = [
-					{
-						date: '2017-11-27',
-						expense: ['play', 'socical'],
-						decribe: '',
-						marks: 3
-					},
-					{
-						date: '2017-11-12',
-						expense: ['play', 'socical'],
-						decribe: '',
-						marks: 3
-					},
-					{
-						date: '2017-11-12',
-						expense: ['play', 'socical'],
-						decribe: '',
-						marks: 3
-					},
-					{
-						date: '2017-11-12',
-						expense: ['play', 'socical'],
-						decribe: '',
-						marks: 3
-					},
-					{
-						date: '2017-11-12',
-						expense: ['play', 'socical'],
-						decribe: '',
-						marks: 3
-					},
-					{
-						date: '2017-11-11',
-						expense: ['play', 'socical'],
-						decribe: '',
-						marks: 3
+				$.ajax({
+					url: '/time/query',
+					data: {
+						from: me.from,
+						to: now
 					}
-				]
-				// $.ajax({
-				// 	url: '/expense/query',
-				// 	data: {
-				// 		from: me.from,
-				// 		to: now
-				// 	}
-				// }).done(function(data){
-				// 	if(data.err === '0'){
-				// 		var result = data.data;
-				// 		var total = 0;
-				// 		result.map(function(item){
-				// 			item.date = moment(item.date).format('YYYY-MM-DD');
-				// 			item.typeTxt = PowerFn.parseExpense(item.type);
-				// 			total += Number(item.amount);
-				// 			return item;
-				// 		});
-				// 		me.sList = getList(result);
-				// 		me.total = total;
-				// 		me.result = result;
-				// 	}
-				// })
+				}).done(function(data){
+					if(data.err === '0'){
+						var result = data.data;
+						console.log(result)
+						result.map(function(item){
+							var date = moment(item.date).format('YYYY-MM-DD');
+							item.date = date + PowerFn.getDayFromDate(date);
+
+							var newArr = [];
+							for(var i=0; i<item.tasks.length; i++){
+								newArr.push(PowerFn.parseTime(item.tasks[i]))
+							}
+							item.tasks = newArr;
+							return item;
+						});
+						me.sList = getList(result);
+						me.result = result;
+					}
+				})
 			},
 			goItem: function(id){
-				location.href= 'expense-edit.html?genus=expend&id=' + id;
+				location.href= 'time-edit.html?id=' + id;
 			},
 			filterConsume: function(type, i){
 				if(this.filterIndex !== -1){

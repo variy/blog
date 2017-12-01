@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+var moment = require('moment');
 
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 var HtmlwebpackPlugin = require('html-webpack-plugin');
@@ -36,7 +37,7 @@ var getEntry = function(){
         obj[item] =  path.join(srcPath, 'pages', item, pageDefaultSetting.entry);
 
     };
-    obj.vendors = ['Jquery','Vue','underscore', 'Global', 'PowerFn' , 'Dialog'];
+    obj.vendors = ['Jquery','Vue','underscore', 'moment', 'Global', 'PowerFn' , 'Dialog'];
     return obj;
 }
 
@@ -207,7 +208,8 @@ var webpackConfig = {
             Global: 'Global',
             Vue: 'Vue',
             PowerFn: 'PowerFn',
-            Dialog: 'Dialog'
+            Dialog: 'Dialog',
+            moment: moment
         })
     ].concat(getHtmlPlugins())
     .concat(otherPlugins)
