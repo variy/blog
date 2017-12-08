@@ -9,6 +9,8 @@ var map = [
 	{value: 'social', txt: 'social', icon: 'cutlery'},
 	{value: 'play', txt: '玩', icon: 'camera-retro icon-lg'},
 	{value: 'date', txt: '约会', icon: 'heart-empty'},
+	{value: 'daytoday', txt: '日常', icon: ''},
+	{value: 'wastetime', txt: '浑浑噩噩', icon: ''}
 ];
 
 $(function() {

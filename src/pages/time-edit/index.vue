@@ -48,7 +48,7 @@
 			return {
 				id: Global.searchObj.id || '',
 				notes: '', 
-				createdDate: moment(new Date).format('YYYY-MM-DD'),
+				createdDate: '',
 				weekendTip: '',
 				marks: '',
 				tasks: []
@@ -87,6 +87,8 @@
 
 
 				})
+			}else{
+				this.createdDate = moment(new Date).format('YYYY-MM-DD')
 			}
 		},
 		mounted: function(){
@@ -113,7 +115,6 @@
 				this.getWeekendTip();
 			},
 			tasks: function(){
-				debugger;
 				var me = this;
 				this.taskList = this.list.map(function(item){
 					if(me.tasks.indexOf(item.value) > -1){

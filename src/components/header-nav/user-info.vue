@@ -1,7 +1,7 @@
 <template>
 	<ul class="nav navbar-nav navbar-right" id="header-login-info">
 		<template v-if="isLogin">
-			<li><a  href="javascript:;">亲爱的 {{ username}}</a></li>
+			<li><a  href="javascript:;">欢迎，{{ username}}</a></li>
 			<li><a href="javascript:;" @click="logout">退出</a></li>
 		</template>
 		<template v-else>

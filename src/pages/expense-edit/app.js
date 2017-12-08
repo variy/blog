@@ -13,12 +13,15 @@ var allList = {
 		{value: 'clothes', txt: '衣服'},
 		{value: 'static', txt: '固定支出'},
 		{value: 'play', txt: '玩儿'},
+		{value: 'learning', txt: '学习'},
 		{value: 'quality', txt: '品质'},
 		{value: 'daily', txt: '日用品'},
 		{value: 'health', txt: '健康'},
 		{value: 'date', txt: '约会'},
 		{value: 'travel', txt: '旅行'},
-		{value: 'treat', txt: '请客吃饭'}
+		{value: 'treat', txt: '请客吃饭'},
+		{value: 'unexpected', txt: '无妄'}
+		
 	],
 	'funds': [
 		{value: 'tuandaiwang', txt: 'tuandaiwang', amount: '200000'},

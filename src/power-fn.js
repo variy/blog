@@ -4,12 +4,14 @@ var expenseMap = {
 	'clothes': '衣服',
 	'static': '固定支出',
 	'play': '玩儿',
+	'learning': '学习',
 	'quality': '品质',
 	'daily': '日用品',
 	'health': '健康',
 	'date': '约会',
 	'travel': '旅行',
 	'treat': '请客吃饭',
+	'unexpected': '无妄'
 };
 var fundsMap = {
 	'tuandaiwang': '团贷网',
@@ -32,7 +34,9 @@ var timeMap = {
 	'draw': '画画',
 	'social': 'social',
 	'play': '玩',
-	'date': '约会'
+	'date': '约会',
+	'daytoday': '日常',
+	'wastetime': '浑浑噩噩'
 };
 var o = {
 	parseExpense: function(v){
