@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="overf-h">
 	    <div class="txt-c mrb-12">
 	        <div class="btn-group">
 	            <button type="button"class="btn btn-default" v-bind:class="{'btn-primary':tab== 0}" @click="tab='0'">登陆</button>

@@ -50,7 +50,8 @@ exports.list = function(req, res){
 		date: {
 			'$gte': new Date(req.query.from),
 			'$lt': new Date(req.query.to)
-		}
+		},
+		type: req.query.type,
 	}, function(list) {
 		var newList = list.map(function(item) {
 			delete item.meta;

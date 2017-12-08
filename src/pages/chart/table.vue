@@ -8,8 +8,15 @@
 	}
 
 	.expend-decr {
+		position: relative;
 		margin-top: 12px;
 		text-indent: 2rem;
+	}
+	.expend-decr > .refresh-btn {
+		position: absolute;
+		right: 20px;
+		top: 7px;
+
 	}
 	td {
 		max-width: 20%;
@@ -24,8 +31,13 @@
 		text-align: center;
 	}
 
-	.vertical-table-tr:hover, .vertical-table-tr.active  {
+	.vertical-table-tr:hover  {
 		background-color: #eee;
+	}
+	.vertical-table-tr.active {
+		background-color: #fff;
+		color: #333;
+
 	}
 	.vertical-table-tr:last-child {
 		border-right: 1px solid #ccc;
@@ -53,15 +65,17 @@
 						<option value="3">三个月</option>
 						<option value="6">六个月</option>
 						<option value="12">一年</option>
-						<option value="all">所有</option>
+						<option value="24">二年</option>
 					</select>&nbsp;&nbsp;
-					<a href="./expense-edit.html?genus=expend" class="btn btn-default btn-sm pull-right">增加</a>
+					<!-- <a href="#" class="link">更多筛选</a>					 -->
+					<a href="./expense-edit.html?genus=expend" class="btn btn-primary btn-sm pull-right">增加</a>
+
 				</div>
 				<p class="expend-decr">
-					从{{from}}起，总花费：{{total}}元，其中:
+						从{{from}}起，总花费：{{total}}元，其中: <a onclick="location.reload();" href="javascript:;" class="refresh-btn glyphicon glyphicon-refresh"></a>
 					<ul class="vertical-table">
 						<li v-for="(item, index) in sList" :class="['vertical-table-tr', {active: item.active}]" @click="filterConsume(item.type, index)">
-							<p>{{item.type}}</p>
+							<p>{{item.txt}}</p>
 							<p>{{item.count}}</p>
 							<p>{{ item.amount}}</p>
 						</li>
@@ -93,6 +107,7 @@
 
 </template>
 <script>
+	var resultList = [];
 	var getList = function(arr){
 		var newArr = [], obj = {};
 		arr.forEach(function(item){
@@ -110,6 +125,7 @@
 		});
 		for(var attr in obj){
 			newArr.push({
+				txt: PowerFn.parseExpense(attr),
 				type: attr,
 				amount: obj[attr].amount,
 				count: obj[attr].count,
@@ -168,6 +184,7 @@
 						me.sList = getList(result);
 						me.total = total;
 						me.result = result;
+						resultList = result.slice();
 					}
 				})
 			},
@@ -175,13 +192,17 @@
 				location.href= 'expense-edit.html?genus=expend&id=' + id;
 			},
 			filterConsume: function(type, i){
-				debugger;
+				// debugger;
 				if(this.filterIndex !== -1){
 					this.sList[this.filterIndex].active = false;
 				}
 				this.filterIndex = i;
 				this.sList[i].active = true;
 				// Vue.set(this.sList, 0, )
+				this.result = resultList.filter(function(item){
+					return item.type === type;
+				});
+
 			},
 			delItem: function(id, e){
 				

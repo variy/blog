@@ -28,7 +28,9 @@ ul, li {
 .txt-c {
 	text-align: center;
 }
-
+.overf-h {
+	overflow: hidden;
+}
 h3 {
 	font-size: 15px;
 }

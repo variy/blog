@@ -169,9 +169,9 @@
     min-width: 400px;
     max-width: 7rem;
     opacity: 0;
+    padding: 0.25rem 0.4rem;
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
-    padding: .4rem .3rem;
     background-color: #fff;
     font-size:.28rem;
     color:#838383;

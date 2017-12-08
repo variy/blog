@@ -42,10 +42,12 @@ ScheMa.statics = {
 			.then(cb);
 	},
 	findByUser: function(opt, cb) {
-		return this.find({
-				from: opt.id,
-				date: opt.date
-			}).sort({'date': -1})
+		var findData = {
+			from: opt.id,
+			date: opt.date
+		};
+		opt.type && (findData.type = opt.type);
+		return this.find(findData).sort({'date': -1})
 			.then(cb);
 	}
 }
