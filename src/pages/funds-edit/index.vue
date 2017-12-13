@@ -21,22 +21,28 @@
 				<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 			    <input class="form-control task-edit-date-input" size="16" v-model="createdDate" type="text">
 			</div>
-			<div class="input-group col-sm-4">
+			<div class="input-group col-xs-4">
 				<span class="input-group-addon">本金</span>
 				<input class="form-control" :value="thousPrincipal" type="text" @keyup="commafy">
+				<select class="form-control width-a" v-model="loanModel">
+					<option  v-for="item in loanModelList" :value="item.value">{{ item.txt}}</option>
+				</select>
 			</div>
 			<div class="input-group col-sm-4">
 				<span class="input-group-addon">备注</span>
 				<input type="text" class="form-control" v-model="notes">
 			</div>
 			<div>
-				周期: &nbsp;{{ cycle}}月<input class="inline-b mrl-10" v-model="cycle" style="width: 180px;"  type="range" step="1" min="0" max="24">
+				周期: &nbsp;{{ cycle}}月<input class="inline-b mrl-10" v-model="cycle" style="width: 180px;"  type="range" step="1" min="0" max="36">
 				<span> &nbsp;&nbsp;{{ finishedDate}}到期</span>
 			</div>
 			<div class="input-group">
 				<span>年收益率: &nbsp;{{yieldRate}}%</span>
 				<input class="inline-b mrl-10" v-model="yieldRate" style="width: 180px;"  type="range" step="1" min="0" max="15">
 				&nbsp;&nbsp;预计：收益 {{ yield}}元，总收{{totalAmount}}元
+			</div>
+			<div>
+				
 			</div>
 			<div class="btn-group">
 				<button type="button" class="btn btn-primary task-save-btn" @click="submit">保存</button>
@@ -51,6 +57,7 @@
 		props: {
 			allList: Object,
 			bigCategories: Array,
+			loanModelList: Array
 		},
 		data: function(){
 			return {
@@ -66,7 +73,8 @@
 				createdDate: moment(new Date).format('YYYY-MM-DD'),
 				finishedDate: '',
 				totalAmount: '',
-				thousPrincipal: ''
+				thousPrincipal: '',
+				loanModel: 'daoqibenxi'
 			}
 		},
 		created: function(){
@@ -176,6 +184,7 @@
 				$.ajax({
 					url: '/funds/saveitem',
 					data: {
+						genus: me.bigC,
 						category: me.category,
 						createdDate: me.createdDate,
 						finishedDate: me.finishedDate,

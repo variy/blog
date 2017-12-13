@@ -10,7 +10,8 @@ var map = [
 	{value: 'play', txt: '玩', icon: 'camera-retro icon-lg'},
 	{value: 'date', txt: '约会', icon: 'heart-empty'},
 	{value: 'daytoday', txt: '日常', icon: ''},
-	{value: 'wastetime', txt: '浑浑噩噩', icon: ''}
+	{value: 'wastetime', txt: '浑浑噩噩', icon: ''},
+	{value: 'movie', txt: '看电影', icon: ''}
 ];
 
 $(function() {

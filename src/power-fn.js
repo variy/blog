@@ -6,7 +6,7 @@ var expenseMap = {
 	'play': '玩儿',
 	'learning': '学习',
 	'quality': '品质',
-	'daily': '日用品',
+	'daily': '日常',
 	'health': '健康',
 	'date': '约会',
 	'travel': '旅行',
@@ -36,14 +36,15 @@ var timeMap = {
 	'play': '玩',
 	'date': '约会',
 	'daytoday': '日常',
-	'wastetime': '浑浑噩噩'
+	'wastetime': '浑浑噩噩',
+	'movie': '看电影'
 };
 var o = {
 	parseExpense: function(v){
 		return expenseMap[v] || '';
 	},
 	parseFunds: function(v){
-		return fundsMap[v] || '';
+		return fundsMap[v] || v;
 	},
 	parseTime: function(v){
 		return timeMap[v] || '';

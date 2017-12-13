@@ -15,7 +15,7 @@ var allList = {
 		{value: 'play', txt: '玩儿'},
 		{value: 'learning', txt: '学习'},
 		{value: 'quality', txt: '品质'},
-		{value: 'daily', txt: '日用品'},
+		{value: 'daily', txt: '日常'},
 		{value: 'health', txt: '健康'},
 		{value: 'date', txt: '约会'},
 		{value: 'travel', txt: '旅行'},
@@ -42,7 +42,7 @@ $(function() {
 	    var cb = function(opts){
 	    	opts = opts || {};
 	    	var defaultOpts = {
-	    		date: moment(new Date).format('YYYY-MM-DD'),
+	    		date: moment(new Date).subtract(1, 'day').format('YYYY-MM-DD'),
 	    		title: '',
 	    		type: '',
 	    		allList: allList,

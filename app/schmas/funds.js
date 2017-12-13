@@ -7,6 +7,7 @@ var ScheMa = new Schema({
 	// 	type: ObjectId,
 	// 	ref: 'invest'
 	// },
+	genus: String,
 	category: String,
 	createdDate: Date,
 	finishedDate: Date,

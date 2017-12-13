@@ -155,7 +155,7 @@
 						console.log(result)
 						result.map(function(item){
 							var date = moment(item.date).format('YYYY-MM-DD');
-							item.date = date + PowerFn.getDayFromDate(date);
+							item.date = date + ' ' +PowerFn.getDayFromDate(date);
 
 							var newArr = [];
 							for(var i=0; i<item.tasks.length; i++){
