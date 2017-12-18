@@ -2,10 +2,9 @@
 	.form-group > div {
 		margin-top: 18px;
 	}
-	.checkbox-list label {
+	.checkbox-list button {
 		display: block;
 		float: left;
-		width: 20%;
 		margin: 0 12px 14px 0;
 	}
 </style>
@@ -18,10 +17,15 @@
 			    <input class="form-control task-edit-date-input" size="16" v-model="createdDate" type="text">
 			</div>{{ weekendTip}}
 			<div class="input-group col-sm-8 checkbox-list">
-				    <label v-for="item in taskList">
+				  <!--   <label v-for="item in taskList">
 			      		<input type="checkbox" :value="item.value" :checked="item.checked">
 			      		<span :class="['glyphicon', 'glyphicon-' + item.icon]"></span> {{ item.txt}}
-				    </label>
+				    </label> -->
+
+			      	<button v-for="item in taskList" :class="['btn', item.count ?'btn-info' : 'btn-default']">
+			      		{{ item.txt}} <span class="badge badge-sm">{{ item.count || '+'}}</span>
+			      	</button>
+
 			</div>
 			<div class="input-group col-sm-4">
 				<span class="input-group-addon">描述</span>
@@ -51,19 +55,14 @@
 				createdDate: '',
 				weekendTip: '',
 				marks: '',
-				tasks: []
+				taskList: []
 			}
 		},
 		created: function(){
 			var me = this;
 			this.getWeekendTip();
 
-			this.taskList = this.list.map(function(item){
-				if(me.tasks.indexOf(item.value) > -1){
-					item.checked = true;
-				}
-				return item;
-			});
+			
 			if(this.id){
 				$.ajax({
 					url: '/time/queryitem',
@@ -76,19 +75,30 @@
 						var obj = {
 							notes: result.notes, 
 							createdDate: moment(result.date).format('YYYY-MM-DD'),
-							marks: result.marks,
-							tasks: result.tasks
+							marks: result.marks
 						}
 						console.log(obj)
 						for(var attr in obj){
 							me[attr] = obj[attr];
 						}
+						var activeArr = [],staticTaskList = [];
+						me.list.forEach(function(item){
+							if(result.tasks.indexOf(item.value) > -1){
+								item.count = 1;
+								activeArr.push(item);
+							}else{
+								staticTaskList.push(item);
+							}
+						});
+						me.taskList = activeArr.concat(staticTaskList);
+						console.log(JSON.stringify(me.taskList))
 					}
 
 
 				})
 			}else{
-				this.createdDate = moment(new Date).format('YYYY-MM-DD')
+				this.createdDate = moment(new Date).format('YYYY-MM-DD');
+				me.taskList = me.list;
 			}
 		},
 		mounted: function(){
@@ -114,17 +124,17 @@
 			createdDate: function(){
 				this.getWeekendTip();
 			},
-			tasks: function(){
-				var me = this;
-				this.taskList = this.list.map(function(item){
-					if(me.tasks.indexOf(item.value) > -1){
-						item.checked = true;
-					}
-					return item;
-				});
-			},
+			// tasks: function(){
+			// 	debugger;
+			// 	var me = this;
+			// 	this.taskList = this.list.map(function(item){
+			// 		if(me.tasks.indexOf(item.value) > -1){
+			// 			item.checked = true;
+			// 		}
+			// 		return item;
+			// 	});
+			// },
 			taskList: function(){
-				debugger;
 			}
 		},
 		methods: {
