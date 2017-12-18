@@ -10,6 +10,8 @@ var ScheMa = new Schema({
 	genus: String,
 	category: String,
 	createdDate: Date,
+	firstRepayDate: Date,
+	repayType: String,
 	finishedDate: Date,
 	principal: Number,
 	cycle: Number,

@@ -59,6 +59,11 @@ var o = {
 	},
 	commafy: function(num){
 		return (num || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+	},
+	getDEBX_perMonth: function(sum, yearRate, monthCount){
+		var mRate = yearRate/12/100;
+		var temp = Math.pow(1+mRate, monthCount);
+		return Math.ceil(sum*mRate*temp/(temp -1));
 	}
 }
 

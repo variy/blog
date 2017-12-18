@@ -25,8 +25,7 @@ var allList = {
 
 var loanModelList = [
 	{value: 'daoqibenxi', txt: '到期本息'},
-	{value: 'dengebenxi', txt: '等额本息'},
-	{value: 'meiyuefuxi', txt: '每月付息'}
+	{value: 'dengebenxi', txt: '等额本息'}
 ]
 $(function() {
 	new Vue({

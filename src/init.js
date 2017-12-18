@@ -21,9 +21,9 @@ var searchObj = (function(){
 	return obj;
 })();
 
-setTimeout(function(){
+$(function(){
 	require('./components/header-nav')	
-}, 0);	
+});	
 
 module.exports = {
 	reqDomain: GLOBALOPTS.requestDomain || '',
