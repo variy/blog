@@ -159,7 +159,12 @@
 
 							var newArr = [];
 							for(var i=0; i<item.tasks.length; i++){
-								newArr.push(PowerFn.parseTime(item.tasks[i]))
+								var inItem = item.tasks[i];
+								if(typeof inItem === 'object'){
+									newArr.push(PowerFn.parseTime(inItem.value) + inItem.count)
+								}else{
+									newArr.push(PowerFn.parseTime(inItem) + '1')
+								}
 							}
 							item.tasks = newArr;
 							return item;

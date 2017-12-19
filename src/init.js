@@ -1,6 +1,6 @@
 require('./css/bootstrap.css');
 require('./css/bootstrap-datetimepicker.css');
-// require('./css/font-awesome.css');
+require('./css/animate.css');
 
 require('./css/dialog.css');
 require('./css/index.css');
@@ -28,5 +28,6 @@ $(function(){
 module.exports = {
 	reqDomain: GLOBALOPTS.requestDomain || '',
 	searchObj: searchObj,
-	eventHub: new Vue
+	eventHub: new Vue,
+	locals: {}
 };

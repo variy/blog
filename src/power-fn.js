@@ -26,7 +26,7 @@ var numUpperMap = {
 	'5': '五',
 	'6': '六'
 };
-var timeMap = {
+var timeMap = Global.locals.timeMap = {
 	'gym': '健身',
 	'health': '健康',
 	'learn': '学习',

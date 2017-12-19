@@ -7,6 +7,37 @@
 		float: left;
 		margin: 0 12px 14px 0;
 	}
+	.btn-info-light {
+		background-color: #c8f1fd;
+		border-color: #a1dbec;
+		color: #fff;
+	}
+	.btn-info-light .badge {
+	    color: #5bc0de;
+	    background-color: #fff;
+	}
+	.btn-left-attach {
+	    position: absolute;
+	    width: 18px;
+	    /* padding: 2px; */
+	    height: 100%;
+	    border-radius: 4px 0 0 4px;
+	    background-color: #488192;
+	    border: 1px solid #488192;
+	    top: -1px;
+	    left: -1px;
+	    box-sizing: content-box;
+	}
+	.btn-right-attach {
+		display: block;
+		height: 100%;
+		margin-left: 20px;
+		padding: 6px 10px;
+	}
+	.tag-btn {
+		padding: 0;
+	}
+
 </style>
 <template>
 	<div class="form-horizonta">	
@@ -22,8 +53,15 @@
 			      		<span :class="['glyphicon', 'glyphicon-' + item.icon]"></span> {{ item.txt}}
 				    </label> -->
 
-			      	<button v-for="item in taskList" :class="['btn', item.count ?'btn-info' : 'btn-default']">
-			      		{{ item.txt}} <span class="badge badge-sm">{{ item.count || '+'}}</span>
+			      	<button v-for="(item, index) in taskList" :class="['btn tag-btn pos-r  padl-25 clearfix', item.count ?'btn-info' : 'btn-default']">
+			      		<span class="btn-left-attach" v-show="item.count" @click="--item.count">-</span>
+			      		<span class="btn-right-attach" @click="++item.count">
+			      			{{ item.txt}} 
+				      		<span class="badge badge-sm">{{ item.count || '+'}}</span>
+				      	</span>
+			      		
+			      		
+
 			      	</button>
 
 			</div>
@@ -82,14 +120,23 @@
 							me[attr] = obj[attr];
 						}
 						var activeArr = [],staticTaskList = [];
-						me.list.forEach(function(item){
-							if(result.tasks.indexOf(item.value) > -1){
-								item.count = 1;
+						var timeMap = _.extend(Global.locals.timeMap);
+
+						result.tasks.forEach(function(item){
+							if(item.value in timeMap){
+								item.txt = timeMap[item.value];
 								activeArr.push(item);
-							}else{
-								staticTaskList.push(item);
+								delete timeMap[item.value];
 							}
 						});
+						for(var attr in timeMap){
+							staticTaskList.push({
+								value: attr,
+								txt: timeMap[attr],
+								count: 0
+							});
+						}
+														
 						me.taskList = activeArr.concat(staticTaskList);
 						console.log(JSON.stringify(me.taskList))
 					}
@@ -119,25 +166,27 @@
     	    	me.createdDate = date;
 
     	    });
+    	    $('body').on('click', '.tag-btn', function(){
+				$(this).find('.badge').addClass('animated fadeInDown');
+    	    });
+    	    $('body').on('animationend', '.badge',function(){
+				$(this).removeClass('animated fadeInDown');
+			});
 		},
 		watch: {
 			createdDate: function(){
 				this.getWeekendTip();
 			},
-			// tasks: function(){
-			// 	debugger;
-			// 	var me = this;
-			// 	this.taskList = this.list.map(function(item){
-			// 		if(me.tasks.indexOf(item.value) > -1){
-			// 			item.checked = true;
-			// 		}
-			// 		return item;
-			// 	});
-			// },
 			taskList: function(){
 			}
 		},
 		methods: {
+			itemAdd: function(e){
+				debugger;
+				// .find('.buble-animate').addClass('animated quick fadeOutUp');
+
+
+			},
 			getWeekendTip: function(){
 				var day = moment(this.createdDate).day();
 				if(day === 6){
@@ -165,17 +214,22 @@
 			},
 			submit: function(){
 				var me = this;
-				var arr = [];
-				$('.checkbox-list input:checked').each(function(i, item){
-					arr.push($(this).val())
-				})
+				var taskList = [];
+				this.taskList.forEach(function(item){
+					if(item.count > 0){
+						taskList.push({
+							value: item.value,
+							count: item.count
+						})
+					}
+				});
 				$.ajax({
 					url: '/time/saveitem',
 					data: {
 						date: me.createdDate,
 						id: me.id,
 						notes: me.notes,
-						tasks: arr,
+						tasks: taskList,
 						marks: me.marks
 					}
 				}).done(function(data){
