@@ -102,7 +102,7 @@
 			
 			if(this.id){
 				$.ajax({
-					url: '/time/queryitem',
+					url: '/diet/queryitem',
 					data: {
 						id: me.id
 					}
@@ -215,7 +215,7 @@
 			delTask: function(id){
 				$.ajax({
 					type: 'delete',
-					url: '/time/del',
+					url: '/diet/del',
 					data: {
 						id: id
 					}
@@ -238,7 +238,7 @@
 					}
 				});
 				$.ajax({
-					url: '/time/saveitem',
+					url: '/diet/saveitem',
 					data: {
 						date: me.createdDate,
 						id: me.id,

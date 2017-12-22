@@ -1,11 +1,10 @@
 var mongoose = require('mongoose');
-var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.Types.ObjectId;
 
 var ScheMa = new Schema({
 	date: Date,
-	tasks: Array,
+	list: Array,
 	notes: String,
 	marks: Number,
 	from: {
