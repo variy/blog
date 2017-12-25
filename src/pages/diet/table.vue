@@ -80,7 +80,7 @@
 					<tbody>
 						<tr v-for="item in result" @click="goItem(item._id)">
 							<td>{{ item.date}}</td>
-							<td>{{ item.tasks.join('，')}}</td>
+							<td>{{ item.list.join('，')}}</td>
 							<td>{{ item.notes}}</td>
 							<td>{{ item.marks}}</td>
 						</tr>
@@ -158,19 +158,18 @@
 							var newArr = [];
 							for(var i=0; i<item.list.length; i++){
 								var inItem = item.list[i];
-								newArr.push(inItem.value);
+								newArr.push(PowerFn.parseDiet(inItem.value) + inItem.count);
 							}
 							item.list = newArr;
 							return item;
 						});
 						// me.sList = getList(result);
-						debugger;
 						me.result = result;
 					}
 				})
 			},
 			goItem: function(id){
-				location.href= 'time-edit.html?id=' + id;
+				location.href= 'diet-edit.html?id=' + id;
 			},
 			// filterConsume: function(type, i){
 			// 	if(this.filterIndex !== -1){

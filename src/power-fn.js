@@ -1,4 +1,5 @@
 var moment = require('moment');
+var oneDayTimetap = 24*60*60*1000;
 var expenseMap = {
 	'food': '食物',
 	'clothes': '衣服',
@@ -39,7 +40,22 @@ var timeMap = Global.locals.timeMap = {
 	'wastetime': '浑浑噩噩',
 	'movie': '看电影'
 };
+
+var dietMap = Global.locals.dietMap = {
+	'excessiveStaple': '主食过量',
+	'nightsnack': '夜宵',
+	'snacks': '零食',
+	'hotpot': '火锅',
+	'together': '聚餐',
+	'date': '约会',
+	'sugarydrinks': '含糖饮料',
+	'candy': '糖果',
+	'puffingOrFries': '膨化或油炸'
+};
 var o = {
+	parseDiet: function(v){
+		return dietMap[v] || '';
+	},
 	parseExpense: function(v){
 		return expenseMap[v] || '';
 	},
@@ -64,6 +80,30 @@ var o = {
 		var mRate = yearRate/12/100;
 		var temp = Math.pow(1+mRate, monthCount);
 		return Math.ceil(sum*mRate*temp/(temp -1));
+	},
+	getTotalUtilNow: function(opts){
+		var repayType = opts.repayType;
+		var firstRepayDate = opts.firstRepayDate || opts.createdDate;
+		var disMonths = Math.round((new Date().getTime() - new Date(firstRepayDate).getTime())/(30*oneDayTimetap));
+		(disMonths < 0) && (disMonths = 0);
+		var amount = 0;
+		switch(repayType){
+			case 'daoqibenxi':
+				var totalRate = Math.pow(1 + 0.01*opts.yieldRate, disMonths/12);
+				amount = Math.round(opts.principal*totalRate);
+			break;
+
+			case 'dengebenxi':
+				var yieldPerM = o.getDEBX_perMonth(opts.principal, opts.yieldRate, opts.cycle) - opts.principal/opts.cycle;
+				amount = opts.principal +  opts.yieldRate*disMonths;
+			break;
+
+			default:
+				amount = opts.principal;
+			break;
+		}
+
+		return amount;
 	}
 }
 

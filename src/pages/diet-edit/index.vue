@@ -64,9 +64,12 @@
 			      	</button>
 
 			</div>
-			<div class="input-group col-sm-4">
-				<span class="input-group-addon">描述</span>
+				<!-- <span class="input-group-addon">描述</span>
 				<input type="text" class="form-control" v-model="notes">
+			</div> -->
+			<div class="input-group col-sm-6">
+				<span class="input-group-addon">描述</span>
+				<textarea class="form-control" placeholder="描述" v-model="notes"></textarea>
 			</div>
 			<div class="input-group col-sm-4">
 				<span class="input-group-addon">评分</span>
@@ -111,7 +114,7 @@
 						var result = data.data;
 						var obj = {
 							notes: result.notes, 
-							createdDate: moment(result.date).format('YYYY-MM-DD'),
+							createdDate: moment(result.date).format('YYYY-MM-DD') + ' ' + PowerFn.getDayFromDate(result.date),
 							marks: result.marks
 						}
 						console.log(obj)
@@ -119,30 +122,19 @@
 							me[attr] = obj[attr];
 						}
 						var activeArr = [],staticTaskList = [];
-						var timeMap = _.extend(Global.locals.timeMap);
-						var tasks = [];
-						if(typeof result.tasks[0] === 'string'){
-
-							result.tasks.forEach(function(item){
-								tasks.push({
-									value: item,
-									count: 1
-								})
-							});
-						}else{
-							tasks = result.tasks;
-						}
+						var dietMap = _.extend(Global.locals.dietMap);
+						var tasks = result.list;;
 						tasks.forEach(function(item){
-							if(item.value in timeMap){
-								item.txt = timeMap[item.value];
+							if(item.value in dietMap){
+								item.txt = dietMap[item.value];
 								activeArr.push(item);
-								delete timeMap[item.value];
+								delete dietMap[item.value];
 							}
 						});
-						for(var attr in timeMap){
+						for(var attr in dietMap){
 							staticTaskList.push({
 								value: attr,
-								txt: timeMap[attr],
+								txt: dietMap[attr],
 								count: 0
 							});
 						}
@@ -154,7 +146,9 @@
 
 				})
 			}else{
-				this.createdDate = moment(new Date).subtract('day', 1).format('YYYY-MM-DD');
+				var date = moment(new Date).subtract('day', 1);
+				var dayStr =  date.day() === 0 ? '日' : numUpperMap[day];
+				this.createdDate = date.format('YYYY-MM-DD') + ' 周' + dayStr;;
 
 				me.taskList = me.list.map(function(item){
 					item.count = item.count || 0;
@@ -176,8 +170,9 @@
     	        minView: 2
     	        // showMeridian: 1
     	    }).on('changeDate', function(e){
-    	    	var date = moment(e.date).format('YYYY-MM-DD')
-    	    	me.createdDate = date;
+    	    	var date = moment(e.date).format('YYYY-MM-DD');
+    	    	var day = PowerFn.getDayFromDate(e.date);
+    	    	me.createdDate = date + ' ' + day;;
 
     	    });
     	    $('body').on('click', '.tag-btn', function(){
@@ -195,12 +190,6 @@
 			}
 		},
 		methods: {
-			itemAdd: function(e){
-				debugger;
-				// .find('.buble-animate').addClass('animated quick fadeOutUp');
-
-
-			},
 			getWeekendTip: function(){
 				var day = moment(this.createdDate).day();
 				if(day === 6){
@@ -243,7 +232,7 @@
 						date: me.createdDate,
 						id: me.id,
 						notes: me.notes,
-						tasks: taskList,
+						list: taskList,
 						marks: me.marks
 					}
 				}).done(function(data){

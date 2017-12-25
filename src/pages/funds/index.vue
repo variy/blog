@@ -10,7 +10,8 @@
 				<thead>
 					<tr>
 						<th>对象</th>
-						<th>总金</th>
+						<th>目前总金</th>
+						<th>预计总收</th>
 						<th>本金</th>
 						<th>利率(%)</th>
 						<th>创建日期</th>
@@ -21,6 +22,7 @@
 				<tbody>
 					<tr v-for="item in dueList" @click="goFundsItem(item.genus, item._id)">
 						<td>{{ item.category}}</td>
+						<td>{{ item.totalUtilNow}}</td>
 						<td>{{ item.thousEvalTotalAmont}}</td>
 						<td>{{ item.principal}}</td>
 						<td>{{ item.yieldRate}}</td>
@@ -38,6 +40,7 @@
 				<thead>
 					<tr>
 						<th>对象</th>
+						<th>目前总金</th>
 						<th>总金</th>
 						<th>本金</th>
 						<th>利率(%)</th>
@@ -49,6 +52,7 @@
 				<tbody>
 					<tr v-for="item in fundsList" @click="goFundsItem(item.genus, item._id)">
 						<td>{{ item.category}}</td>
+						<td>{{ item.totalUtilNow}}</td>
 						<td>{{ item.thousEvalTotalAmont}}</td>
 						<td>{{ item.principal}}</td>
 						<td>{{ item.yieldRate}}</td>
@@ -66,10 +70,12 @@
 				<thead>
 					<tr>
 						<th>对象</th>
+						<th>目前总金</th>
 						<th>总金</th>
 						<th>本金</th>
 						<th>利率(%)</th>
 						<th>创建日期</th>
+						<th>首次还款</th>
 						<th>结束日期</th>
 						<th>周期(月)</th>
 					</tr>
@@ -77,10 +83,12 @@
 				<tbody>
 					<tr v-for="item in receiveList" @click="goFundsItem(item.genus, item._id)">
 						<td>{{ item.category}}</td>
+						<td>{{ item.totalUtilNow}}</td>
 						<td>{{ item.thousEvalTotalAmont}}</td>
 						<td>{{ item.principal}}</td>
 						<td>{{ item.yieldRate}}</td>
 						<td>{{ item.createdDate}}</td>
+						<td>{{ item.firstRepayDate}}</td>
 						<td>{{ item.finishedDate}}</td>
 						<td>{{ item.cycle}}</td>
 					</tr>
@@ -104,6 +112,7 @@
 		},
 		created: function(){
 			var totalFunds = 0, totalReceive = 0, totalDue = 0;
+
 			this.dueList = this.list.filter(function(item){
 				return item.genus === 'due';
 			});
@@ -114,17 +123,17 @@
 				return item.genus === 'receivables';
 			});
 			this.fundsList.forEach(function(item){
-				totalFunds += Number(item.evalTotalAmont);
+				totalFunds += Number(item.totalUtilNow.replace(/\,/,''));
 			});
 			this.totalFunds = PowerFn.commafy(totalFunds);
 
 			this.receiveList.forEach(function(item){
-				totalReceive += Number(item.evalTotalAmont);
+				totalReceive += Number(item.totalUtilNow.replace(/\,/,''));
 			});
 			this.totalReceive = PowerFn.commafy(totalReceive);
 
 			this.dueList.forEach(function(item){
-				totalDue += Number(item.evalTotalAmont);
+				totalDue += Number(item.totalUtilNow.replace(/\,/,''));
 			});
 			this.totalDue = PowerFn.commafy(totalDue);
 			this.total = PowerFn.commafy(totalFunds + totalReceive - totalDue)
