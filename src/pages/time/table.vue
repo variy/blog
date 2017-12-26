@@ -25,7 +25,7 @@
 	}
 
 	.vertical-table-tr:hover, .vertical-table-tr.active  {
-		background-color: #eee;
+		background-color: #fff;
 	}
 	.vertical-table-tr:last-child {
 		border-right: 1px solid #ccc;
@@ -80,7 +80,7 @@
 					<tbody>
 						<tr v-for="item in result" @click="goItem(item._id)">
 							<td>{{ item.date}}</td>
-							<td>{{ item.tasks.join('，')}}</td>
+							<td>{{ item.tasksStr}}</td>
 							<td>{{ item.notes}}</td>
 							<td>{{ item.marks}}</td>
 						</tr>
@@ -96,13 +96,13 @@
 		var taskList = [];
 		var newArr = [], obj = {};
 		arr.forEach(function(item){
-			taskList = taskList.concat(item.tasks);
+			taskList = taskList.concat(item.newArr);
 		});
 		taskList.forEach(function(item){
-			if(item in obj){
-				obj[item]++;
+			if(item.txt in obj){
+				obj[item.txt]+= item.count;
 			}else{
-				obj[item] = 1;
+				obj[item.txt] = item.count;
 			}
 		});
 		for(var attr in obj){
@@ -118,6 +118,7 @@
 		return newArr;
 	}
 	var moment = require('moment');
+	var StaticResult = [];
 	module.exports = {
 		data: function(){
 			return {
@@ -157,20 +158,33 @@
 							var date = moment(item.date).format('YYYY-MM-DD');
 							item.date = date + ' ' +PowerFn.getDayFromDate(date);
 
-							var newArr = [];
+							var newArr = [], tasks = [];
 							for(var i=0; i<item.tasks.length; i++){
 								var inItem = item.tasks[i];
 								if(typeof inItem === 'object'){
-									newArr.push(PowerFn.parseTime(inItem.value) + inItem.count)
+									newArr.push({
+										txt: PowerFn.parseTime(inItem.value),
+										count: Number(inItem.count)
+									});
+									var moreTxt = inItem.count > 1 ? ('*' + inItem.count) : '';
+									tasks.push(PowerFn.parseTime(inItem.value) + moreTxt);
+									// + inItem.count
 								}else{
-									newArr.push(PowerFn.parseTime(inItem) + '1')
+									newArr.push({
+										txt: PowerFn.parseTime(inItem),
+										count: 1
+									});
+									tasks.push(PowerFn.parseTime(inItem))
+									// + '1'
 								}
 							}
-							item.tasks = newArr;
+							item.tasksStr = tasks.join('，');
+							item.newArr = newArr;
 							return item;
 						});
 						me.sList = getList(result);
 						me.result = result;
+						StaticResult = _.extend(result);
 					}
 				})
 			},
@@ -183,6 +197,9 @@
 				}
 				this.filterIndex = i;
 				this.sList[i].active = true;
+				this.result = StaticResult.filter(function(item){
+					return item.tasksStr.indexOf(type) > -1;
+				});
 				// Vue.set(this.sList, 0, )
 			},
 			delItem: function(id, e){

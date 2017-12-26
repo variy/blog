@@ -37,7 +37,7 @@ var timeMap = Global.locals.timeMap = {
 	'play': '玩',
 	'date': '约会',
 	'daytoday': '日常',
-	'wastetime': '浑浑噩噩',
+	'wastetime': '浑噩',
 	'movie': '看电影'
 };
 

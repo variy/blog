@@ -59,12 +59,12 @@
 				</div>
 				<p class="expend-decr">
 					从{{from}}起，其中:
-					<!-- <ul class="vertical-table">
+					<ul class="vertical-table">
 						<li v-for="(item, index) in sList" :class="['vertical-table-tr', {active: item.active}]" @click="filterConsume(item.type, index)">
 							<p>{{item.type}}</p>
 							<p>{{item.count}}</p>
 						</li>
-					</ul> -->
+					</ul>
 				</p>
 				
 			</div>
@@ -80,7 +80,7 @@
 					<tbody>
 						<tr v-for="item in result" @click="goItem(item._id)">
 							<td>{{ item.date}}</td>
-							<td>{{ item.list.join('，')}}</td>
+							<td>{{ item.listStr}}</td>
 							<td>{{ item.notes}}</td>
 							<td>{{ item.marks}}</td>
 						</tr>
@@ -96,13 +96,13 @@
 		var taskList = [];
 		var newArr = [], obj = {};
 		arr.forEach(function(item){
-			taskList = taskList.concat(item.tasks);
+			taskList = taskList.concat(item.list);
 		});
 		taskList.forEach(function(item){
-			if(item in obj){
-				obj[item]++;
+			if(item.txt in obj){
+				obj[item.txt]+= item.count;
 			}else{
-				obj[item] = 1;
+				obj[item.txt] = item.count;
 			}
 		});
 		for(var attr in obj){
@@ -124,7 +124,7 @@
 				dateQuery: Global.searchObj.dateQuery || '1',
 				result: [],
 				from: '',
-				// sList: [],
+				sList: [],
 				filterIndex: -1
 			}
 		},
@@ -155,15 +155,24 @@
 							var date = moment(item.date).format('YYYY-MM-DD');
 							item.date = date + ' ' +PowerFn.getDayFromDate(date);
 
-							var newArr = [];
+							var newArr = [] ,inList = [];
 							for(var i=0; i<item.list.length; i++){
 								var inItem = item.list[i];
-								newArr.push(PowerFn.parseDiet(inItem.value) + inItem.count);
+								var moreStr = inItem.count > 1 ? ('*' + inItem.count) : '';
+								newArr.push(PowerFn.parseDiet(inItem.value) + moreStr);
+								// newArr.push(PowerFn.parseDiet(inItem.value) + inItem.count);
+								inList.push({
+									txt: PowerFn.parseDiet(inItem.value),
+									count: Number(inItem.count)
+								})
+
 							}
-							item.list = newArr;
+							item.listStr = newArr.join('，');
+							item.list = inList;
+
 							return item;
 						});
-						// me.sList = getList(result);
+						me.sList = getList(result);
 						me.result = result;
 					}
 				})
@@ -171,14 +180,14 @@
 			goItem: function(id){
 				location.href= 'diet-edit.html?id=' + id;
 			},
-			// filterConsume: function(type, i){
-			// 	if(this.filterIndex !== -1){
-			// 		this.sList[this.filterIndex].active = false;
-			// 	}
-			// 	this.filterIndex = i;
-			// 	this.sList[i].active = true;
-			// 	// Vue.set(this.sList, 0, )
-			// },
+			filterConsume: function(type, i){
+				if(this.filterIndex !== -1){
+					this.sList[this.filterIndex].active = false;
+				}
+				this.filterIndex = i;
+				this.sList[i].active = true;
+				// Vue.set(this.sList, 0, )
+			},
 			delItem: function(id, e){
 				
 							
