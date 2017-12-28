@@ -6,6 +6,8 @@ var Expense = require('../app/controllers/expense.js')
 var Funds = require('../app/controllers/funds.js')
 var Time = require('../app/controllers/time.js')
 var Diet = require('../app/controllers/diet.js')
+var Log = require('../app/controllers/log.js')
+
 
 
 
@@ -53,4 +55,9 @@ router.get('/diet/query', User.signinRequired, Diet.list);
 router.get('/diet/queryitem', User.signinRequired, Diet.queryitem);
 router.delete('/diet/del', User.signinRequired, Diet.delItem);
 
+// 日记
+router.get('/log/saveitem', User.signinRequired, Log.save);
+router.get('/log/query', User.signinRequired, Log.list);
+router.get('/log/queryitem', User.signinRequired, Log.queryitem);
+router.delete('/log/del', User.signinRequired, Log.delItem);
 module.exports = router;
