@@ -147,7 +147,7 @@
 				})
 			}else{
 				var date = moment(new Date).subtract('day', 1);
-				var dayStr =  date.day() === 0 ? '日' : numUpperMap[day];
+				var dayStr =  date.day() === 0 ? '日' : PowerFn.parseNumUpper(date.day());
 				this.createdDate = date.format('YYYY-MM-DD') + ' 周' + dayStr;;
 
 				me.taskList = me.list.map(function(item){
@@ -211,7 +211,7 @@
 				}).done(function(data){
 					if(data.err === '0'){
 						alert('删除成功');
-						location.hash='';
+						history.go('-1');
 					}
 				})
 			},
@@ -226,10 +226,11 @@
 						})
 					}
 				});
+				console.log(1)
 				$.ajax({
 					url: '/diet/saveitem',
 					data: {
-						date: me.createdDate,
+						date: me.createdDate.split(' ')[0],
 						id: me.id,
 						notes: me.notes,
 						list: taskList,
