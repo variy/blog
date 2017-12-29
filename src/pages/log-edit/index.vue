@@ -41,35 +41,18 @@
 <template>
 	<div class="form-horizonta">	
 		<div class="form-group">
+			<div class="input-group col-sm-6">
+				<span class="input-group-addon">标题</span>
+				<input class="form-control" type="text" v-model="title">
+			</div>
 			<div class="input-group date form_datetime col-sm-4">
 				<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 				<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 			    <input class="form-control task-edit-date-input" size="16" v-model="createdDate" type="text">
 			</div>{{ weekendTip}}
-			<div class="input-group col-sm-8 checkbox-list">
-				  <!--   <label v-for="item in taskList">
-			      		<input type="checkbox" :value="item.value" :checked="item.checked">
-			      		<span :class="['glyphicon', 'glyphicon-' + item.icon]"></span> {{ item.txt}}
-				    </label> -->
-
-			      	<button v-for="(item, index) in taskList" :class="['btn tag-btn pos-r  padl-25 clearfix', item.count ?'btn-info' : 'btn-default']">
-			      		<span class="btn-left-attach" v-show="item.count" @click="--item.count">-</span>
-			      		<span class="btn-right-attach" @click="++item.count">
-			      			{{ item.txt}} 
-				      		<span class="badge badge-sm">{{ item.count || '+'}}</span>
-				      	</span>
-			      		
-			      		
-
-			      	</button>
-
-			</div>
-				<!-- <span class="input-group-addon">描述</span>
-				<input type="text" class="form-control" v-model="notes">
-			</div> -->
 			<div class="input-group col-sm-6">
-				<span class="input-group-addon">描述</span>
-				<textarea class="form-control" placeholder="描述" v-model="notes"></textarea>
+				<span class="input-group-addon">内容</span>
+				<textarea class="form-control" placeholder="描述" v-model="content"></textarea>
 			</div>
 			<div class="input-group col-sm-4">
 				<span class="input-group-addon">评分</span>
@@ -91,11 +74,11 @@
 		data: function(){
 			return {
 				id: Global.searchObj.id || '',
-				notes: '', 
+				content: '', 
 				createdDate: '',
 				weekendTip: '',
 				marks: '',
-				taskList: []
+				title: ''
 			}
 		},
 		created: function(){
@@ -113,7 +96,8 @@
 					if(data.err === '0'){
 						var result = data.data;
 						var obj = {
-							notes: result.notes, 
+							content: result.content,
+							title: result.title, 
 							createdDate: moment(result.date).format('YYYY-MM-DD') + ' ' + PowerFn.getDayFromDate(result.date),
 							marks: result.marks
 						}
@@ -121,39 +105,15 @@
 						for(var attr in obj){
 							me[attr] = obj[attr];
 						}
-						var activeArr = [],staticTaskList = [];
-						var dietMap = _.extend(Global.locals.dietMap);
-						var tasks = result.list;;
-						tasks.forEach(function(item){
-							if(item.value in dietMap){
-								item.txt = dietMap[item.value];
-								activeArr.push(item);
-								delete dietMap[item.value];
-							}
-						});
-						for(var attr in dietMap){
-							staticTaskList.push({
-								value: attr,
-								txt: dietMap[attr],
-								count: 0
-							});
-						}
-														
-						me.taskList = activeArr.concat(staticTaskList);
-						console.log(JSON.stringify(me.taskList))
 					}
 
 
 				})
-			}else{
+			}else{		
+				debugger;
 				var date = moment(new Date).subtract('day', 1);
 				var dayStr =  date.day() === 0 ? '日' : PowerFn.parseNumUpper(date.day());
 				this.createdDate = date.format('YYYY-MM-DD') + ' 周' + dayStr;;
-
-				me.taskList = me.list.map(function(item){
-					item.count = item.count || 0;
-					return item;
-				});
 			}
 		},
 		mounted: function(){
@@ -185,8 +145,6 @@
 		watch: {
 			createdDate: function(){
 				this.getWeekendTip();
-			},
-			taskList: function(){
 			}
 		},
 		methods: {
@@ -217,24 +175,14 @@
 			},
 			submit: function(){
 				var me = this;
-				var taskList = [];
-				this.taskList.forEach(function(item){
-					if(item.count > 0){
-						taskList.push({
-							value: item.value,
-							count: item.count
-						})
-					}
-				});
-				console.log(1)
 				debugger;
 				$.ajax({
 					url: '/log/saveitem',
 					data: {
 						date: me.createdDate.split(' ')[0],
 						id: me.id,
-						notes: me.notes,
-						list: taskList,
+						title: me.title,
+						content: me.content,
 						marks: me.marks
 					}
 				}).done(function(data){
